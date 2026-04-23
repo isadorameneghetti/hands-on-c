@@ -1,0 +1,14 @@
+C:\Users\Isa.WIN-63V13HQCTRV\Source\Repos\handson05\handson05\bin\Debug\net8.0\handson05.exe
+C:\Users\Isa.WIN-63V13HQCTRV\Source\Repos\handson05\handson05\bin\Debug\net8.0\handson05.deps.json
+C:\Users\Isa.WIN-63V13HQCTRV\Source\Repos\handson05\handson05\bin\Debug\net8.0\handson05.runtimeconfig.json
+C:\Users\Isa.WIN-63V13HQCTRV\Source\Repos\handson05\handson05\bin\Debug\net8.0\handson05.dll
+C:\Users\Isa.WIN-63V13HQCTRV\Source\Repos\handson05\handson05\bin\Debug\net8.0\handson05.pdb
+C:\Users\Isa.WIN-63V13HQCTRV\Source\Repos\handson05\handson05\obj\Debug\net8.0\handson05.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Isa.WIN-63V13HQCTRV\Source\Repos\handson05\handson05\obj\Debug\net8.0\handson05.AssemblyInfoInputs.cache
+C:\Users\Isa.WIN-63V13HQCTRV\Source\Repos\handson05\handson05\obj\Debug\net8.0\handson05.AssemblyInfo.cs
+C:\Users\Isa.WIN-63V13HQCTRV\Source\Repos\handson05\handson05\obj\Debug\net8.0\handson05.csproj.CoreCompileInputs.cache
+C:\Users\Isa.WIN-63V13HQCTRV\Source\Repos\handson05\handson05\obj\Debug\net8.0\handson05.dll
+C:\Users\Isa.WIN-63V13HQCTRV\Source\Repos\handson05\handson05\obj\Debug\net8.0\refint\handson05.dll
+C:\Users\Isa.WIN-63V13HQCTRV\Source\Repos\handson05\handson05\obj\Debug\net8.0\handson05.pdb
+C:\Users\Isa.WIN-63V13HQCTRV\Source\Repos\handson05\handson05\obj\Debug\net8.0\handson05.genruntimeconfig.cache
+C:\Users\Isa.WIN-63V13HQCTRV\Source\Repos\handson05\handson05\obj\Debug\net8.0\ref\handson05.dll
