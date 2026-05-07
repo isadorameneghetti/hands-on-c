@@ -1,4 +1,4 @@
-# 🎮 PROJETOS C# - JOKEMPO & BLACKJACK & AGENDA
+# 🎮 PROJETOS C# - JOKEMPO & BLACKJACK & AGENDA & GCLAB
 
 ![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white)
 ![.NET](https://img.shields.io/badge/.NET-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
@@ -41,6 +41,7 @@ Este repositório contém os projetos desenvolvidos durante a disciplina, aborda
 - Coleções e Listas
 - Tratamento de exceções
 - Trabalho com datas e fusos horários
+- **Garbage Collection e gerenciamento de memória**
 
 ---
 
@@ -58,8 +59,11 @@ Este repositório contém os projetos desenvolvidos durante a disciplina, aborda
 ├── hands-on-03/                   # Projeto Blackjack
 │   └── Blackjack/                 # Jogo de cartas 21
 │
-└── hands-on-05/                   # Projeto Agenda
-    └── AgendaConsole/             # Agenda com fusos horários
+├── hands-on-05/                   # Projeto Agenda
+│   └── AgendaConsole/             # Agenda com fusos horários
+│
+└── hands-on-06/                   # Projeto GCLab
+    └── GCLab/                     # Laboratório de Garbage Collection
 ```
 
 | Branch | Projeto | Descrição | Status |
@@ -68,6 +72,7 @@ Este repositório contém os projetos desenvolvidos durante a disciplina, aborda
 | `hands-on-02` | Jokempo | Versão aprimorada com estatísticas e histórico | ✅ Concluído |
 | `hands-on-03` | Blackjack 21 | Jogo de cartas Blackjack | ✅ Concluído |
 | `hands-on-05` | AgendaConsole | Sistema de agenda com fusos horários | ✅ Concluído |
+| `hands-on-06` | GCLab | Laboratório de Garbage Collection | ✅ Concluído |
 
 ---
 
@@ -166,6 +171,11 @@ Sistema de agenda com suporte a múltiplos fusos horários.
 | UTC-5 | `SA Pacific Standard Time` |
 | UTC-4 | `SA Western Standard Time` |
 | UTC-3 | `E. South America Standard Time` |
+| UTC-5 | `Eastern Standard Time` |
+| UTC-8 | `Pacific Standard Time` |
+| UTC+0 | `GMT Standard Time` |
+| UTC+5 | `Pakistan Standard Time` |
+| UTC+9 | `Tokyo Standard Time` |
 
 ### Como Executar
 ```bash
@@ -175,21 +185,79 @@ dotnet run
 
 ---
 
+## 🗑️ PROJETO 5: GCLAB (hands-on-06)
+
+### Sobre o Projeto
+Laboratório de Garbage Collection em C# - Identificação e Correção de Memory Leaks.
+
+### Problemas Propositais
+
+| # | Problema | Descrição |
+|---|----------|-----------|
+| **1** | **Event Leak** | Subscriber inscrito em evento sem nunca desinscrever |
+| **2** | **LOH + Cache Estático** | Buffer grande (200KB) no LOH armazenado em cache estático sem expiração |
+| **3** | **Pinned Buffer** | Buffer fixado (pinned) por longo período, impedindo movimentação do GC |
+| **4** | **String Concatenação** | 50.000 concatenações gerando resíduo no Gen0/Gen1 |
+| **5** | **Recurso externo sem Dispose** | StreamWriter sem liberação adequada, dependendo apenas do finalizador |
+
+### Correções Aplicadas
+
+| Problema | Solução |
+|----------|---------|
+| **Event Leak** | Implementar `IDisposable` e remover evento no `Dispose()` |
+| **LOH + Cache** | Usar `WeakReference` + política FIFO de remoção |
+| **Pinned Buffer** | Implementar `IDisposable` para desfixar via `GCHandle.Free()` |
+| **String Concat** | Substituir por `StringBuilder` |
+| **Recurso externo** | Implementar `IDisposable` padrão com `Dispose()` do StreamWriter |
+
+### Como Executar
+```bash
+cd hands-on-06/GCLab
+dotnet run
+```
+
+### Exemplo de saída esperada (antes da correção):
+```
+--- Verificação de sobreviventes (WeakReference) ---
+subscriber: vivo
+lohBuffer: vivo
+pinnedBuffer: vivo
+logger: vivo
+-----------------------------------------------
+❌ Existem sobreviventes indesejados.
+```
+
+### Exemplo de saída (após correção):
+```
+--- Verificação de sobreviventes (WeakReference) ---
+subscriber: coletado
+lohBuffer: coletado
+pinnedBuffer: coletado
+logger: coletado
+-----------------------------------------------
+✅ GC limpo: nenhuma referência indesejada permaneceu viva.
+```
+
+---
+
 ## 🧠 CONCEITOS APLICADOS
 
-| Conceito | Jokempo V1 | Jokempo V2 | Blackjack | Agenda |
-|----------|:----------:|:----------:|:---------:|:------:|
-| **Classes e Objetos** | ✅ | ✅ | ✅ | ✅ |
-| **Métodos** | ✅ | ✅ | ✅ | ✅ |
-| **If/Else** | ✅ | ✅ | ✅ | ✅ |
-| **Switch/Case** | ✅ | ✅ | ✅ | ✅ |
-| **While/For** | ✅ | ✅ | ✅ | ✅ |
-| **Listas/Tipos Genéricos** | ❌ | ✅ | ✅ | ✅ |
-| **Enumerações** | ✅ | ✅ | ✅ | ❌ |
-| **Encapsulamento** | ✅ | ✅ | ✅ | ✅ |
-| **Tratamento de Exceções** | ❌ | ✅ | ❌ | ✅ |
-| **LINQ** | ❌ | ❌ | ❌ | ✅ |
-| **TimeZoneInfo** | ❌ | ❌ | ❌ | ✅ |
+| Conceito | Jokempo V1 | Jokempo V2 | Blackjack | Agenda | GCLab |
+|----------|:----------:|:----------:|:---------:|:------:|:-----:|
+| **Classes e Objetos** | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Métodos** | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **If/Else** | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Switch/Case** | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **While/For** | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Listas/Tipos Genéricos** | ❌ | ✅ | ✅ | ✅ | ✅ |
+| **Enumerações** | ✅ | ✅ | ✅ | ❌ | ❌ |
+| **Encapsulamento** | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Tratamento de Exceções** | ❌ | ✅ | ❌ | ✅ | ✅ |
+| **LINQ** | ❌ | ❌ | ❌ | ✅ | ❌ |
+| **TimeZoneInfo** | ❌ | ❌ | ❌ | ✅ | ❌ |
+| **Garbage Collection** | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **WeakReference** | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **IDisposable Pattern** | ❌ | ❌ | ❌ | ❌ | ✅ |
 
 ---
 
@@ -204,6 +272,7 @@ git checkout hands-on-01  # Jokempo versão 1
 git checkout hands-on-02  # Jokempo versão 2
 git checkout hands-on-03  # Blackjack
 git checkout hands-on-05  # AgendaConsole
+git checkout hands-on-06  # GCLab
 ```
 
 ---
@@ -216,6 +285,7 @@ git checkout hands-on-05  # AgendaConsole
 | Jokempo (Avançado) | `hands-on-02` | 29/10/2026 | ✅ Concluído |
 | Blackjack | `hands-on-03` | 12/11/2026 | ✅ Concluído |
 | AgendaConsole | `hands-on-05` | 26/11/2026 | ✅ Concluído |
+| GCLab | `hands-on-06` | 10/12/2026 | ✅ Concluído |
 
 ---
 
@@ -245,6 +315,7 @@ Durante o desenvolvimento dos projetos, foram trabalhados:
 3. **POO** - Encapsulamento, construtores, propriedades
 4. **Coleções** - Uso de List, Dictionary, Queue, Stack
 5. **Fusos horários** - Conversão com TimeZoneInfo
+6. **Gerenciamento de Memória** - Garbage Collection, WeakReference, IDisposable
 
 ---
 
@@ -253,11 +324,12 @@ Durante o desenvolvimento dos projetos, foram trabalhados:
 - [Documentação C#](https://learn.microsoft.com/pt-br/dotnet/csharp/)
 - [.NET Download](https://dotnet.microsoft.com/download)
 - [Git Download](https://git-scm.com/downloads)
+- [Garbage Collection no .NET](https://learn.microsoft.com/pt-br/dotnet/standard/garbage-collection/)
 
 ---
 
 <p align="center">
   <b>FIAP - Faculdade de Informática e Administração Paulista</b><br>
-  Desenvolvido com ❤️ pelos alunos da turma 3ESC<br>
+  Desenvolvido com ❤️ pelos alunos da turma 3ESA<br>
   © 2026 - Todos os direitos reservados
 </p>
