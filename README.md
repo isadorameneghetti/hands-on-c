@@ -1,4 +1,13 @@
-# 🎮 PROJETOS C# - JOKEMPO & BLACKJACK & AGENDA & GCLAB
+Ah, entendi! Vamos corrigir a estrutura:
+
+- `hands-on-05.2` = **GCLab** (Laboratório de Garbage Collection)
+- `hands-on-06` = **AsyncLab** (Laboratório de Programação Assíncrona)
+
+Aqui está o README corrigido:
+
+---
+
+# 🎮 PROJETOS C# - JOKEMPO & BLACKJACK & AGENDA & GCLAB & ASYNCLAB
 
 ![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white)
 ![.NET](https://img.shields.io/badge/.NET-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
@@ -42,41 +51,40 @@ Este repositório contém os projetos desenvolvidos durante a disciplina, aborda
 - Tratamento de exceções
 - Trabalho com datas e fusos horários
 - **Garbage Collection e gerenciamento de memória**
+- **Programação Assíncrona e Paralelismo**
 
 ---
 
-## 📁 ESTRUTURA DO REPOSITÓRIO
+## 📁 ESTRUTURA DO REPOSITÓRIO (BRANCHES)
 
 ```
-├── main/                          # Branch principal (documentação)
+main                    # Branch principal (documentação)
 │
-├── hands-on-01/                   # Primeira versão do Jokempo
-│   └── Jokempo/                   # Pedra, Papel e Tesoura (básico)
-│
-├── hands-on-02/                   # Segunda versão do Jokempo
-│   └── Jokempo/                   # Com estatísticas e histórico
-│
-├── hands-on-03/                   # Projeto Blackjack
-│   └── Blackjack/                 # Jogo de cartas 21
-│
-├── hands-on-05/                   # Projeto Agenda
-│   └── AgendaConsole/             # Agenda com fusos horários
-│
-└── hands-on-06/                   # Projeto GCLab
-    └── GCLab/                     # Laboratório de Garbage Collection
+├── hands-on-01         # Jokempo v1 - Pedra, Papel e Tesoura
+├── hands-on-02         # Jokempo v2 - Com estatísticas e histórico
+├── hands-on-03         # Blackjack - Jogo de cartas 21
+├── hands-on-05         # AgendaConsole - Com fusos horários
+├── hands-on-05.2       # GCLab - Laboratório de Garbage Collection
+└── hands-on-06         # AsyncLab - Laboratório de Programação Assíncrona
 ```
+
+---
+
+## 📊 STATUS DAS BRANCHES
 
 | Branch | Projeto | Descrição | Status |
 |--------|---------|-----------|--------|
-| `hands-on-01` | Jokempo | Versão inicial do Pedra, Papel e Tesoura | ✅ Concluído |
-| `hands-on-02` | Jokempo | Versão aprimorada com estatísticas e histórico | ✅ Concluído |
+| `main` | Documentação | README principal do repositório | ✅ Ativo |
+| `hands-on-01` | Jokempo v1 | Pedra, Papel e Tesoura (básico) | ✅ Concluído |
+| `hands-on-02` | Jokempo v2 | Com estatísticas e histórico de jogadores | ✅ Concluído |
 | `hands-on-03` | Blackjack 21 | Jogo de cartas Blackjack | ✅ Concluído |
 | `hands-on-05` | AgendaConsole | Sistema de agenda com fusos horários | ✅ Concluído |
-| `hands-on-06` | GCLab | Laboratório de Garbage Collection | ✅ Concluído |
+| `hands-on-05.2` | **GCLab** | Laboratório de Garbage Collection | ✅ Concluído |
+| `hands-on-06` | **AsyncLab** | Laboratório de Programação Assíncrona | ✅ Concluído |
 
 ---
 
-## 🎮 PROJETO 1: JOKEMPO (hands-on-01)
+## 🎮 PROJETO 1: JOKEMPO V1 (hands-on-01)
 
 ### Sobre o Projeto
 Jogo de Pedra, Papel e Tesoura onde o usuário joga contra o computador.
@@ -90,7 +98,8 @@ Jogo de Pedra, Papel e Tesoura onde o usuário joga contra o computador.
 
 ### Como Jogar
 ```bash
-cd hands-on-01/Jokempo
+git checkout hands-on-01
+cd Jokempo
 dotnet run
 ```
 
@@ -119,6 +128,13 @@ dotnet run
 - Empates
 - Taxa de aproveitamento
 
+### Como Jogar
+```bash
+git checkout hands-on-02
+cd Jokempo
+dotnet run
+```
+
 ---
 
 ## 🃏 PROJETO 3: BLACKJACK 21 (hands-on-03)
@@ -141,7 +157,8 @@ Jogo de cartas Blackjack (21) desenvolvido com Programação Orientada a Objetos
 
 ### Como Jogar
 ```bash
-cd hands-on-03/Blackjack
+git checkout hands-on-03
+cd Blackjack
 dotnet run
 ```
 
@@ -179,13 +196,14 @@ Sistema de agenda com suporte a múltiplos fusos horários.
 
 ### Como Executar
 ```bash
-cd hands-on-05/AgendaConsole
+git checkout hands-on-05
+cd AgendaConsole
 dotnet run
 ```
 
 ---
 
-## 🗑️ PROJETO 5: GCLAB (hands-on-06)
+## 🗑️ PROJETO 5: GCLAB (hands-on-05.2)
 
 ### Sobre o Projeto
 Laboratório de Garbage Collection em C# - Identificação e Correção de Memory Leaks.
@@ -212,19 +230,9 @@ Laboratório de Garbage Collection em C# - Identificação e Correção de Memor
 
 ### Como Executar
 ```bash
-cd hands-on-06/GCLab
+git checkout hands-on-05.2
+cd GCLab
 dotnet run
-```
-
-### Exemplo de saída esperada (antes da correção):
-```
---- Verificação de sobreviventes (WeakReference) ---
-subscriber: vivo
-lohBuffer: vivo
-pinnedBuffer: vivo
-logger: vivo
------------------------------------------------
-❌ Existem sobreviventes indesejados.
 ```
 
 ### Exemplo de saída (após correção):
@@ -240,61 +248,95 @@ logger: coletado
 
 ---
 
-## 🧠 CONCEITOS APLICADOS
+## ⚡ PROJETO 6: ASYNCLAB (hands-on-06)
 
-| Conceito | Jokempo V1 | Jokempo V2 | Blackjack | Agenda | GCLab |
-|----------|:----------:|:----------:|:---------:|:------:|:-----:|
-| **Classes e Objetos** | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Métodos** | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **If/Else** | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Switch/Case** | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **While/For** | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Listas/Tipos Genéricos** | ❌ | ✅ | ✅ | ✅ | ✅ |
-| **Enumerações** | ✅ | ✅ | ✅ | ❌ | ❌ |
-| **Encapsulamento** | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Tratamento de Exceções** | ❌ | ✅ | ❌ | ✅ | ✅ |
-| **LINQ** | ❌ | ❌ | ❌ | ✅ | ❌ |
-| **TimeZoneInfo** | ❌ | ❌ | ❌ | ✅ | ❌ |
-| **Garbage Collection** | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **WeakReference** | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **IDisposable Pattern** | ❌ | ❌ | ❌ | ❌ | ✅ |
+### Sobre o Projeto
+Laboratório de Programação Assíncrona em C# - Comparação de performance entre código síncrono e assíncrono/paralelo.
 
----
+### Funcionalidades
+- ✅ Download do CSV de municípios (Receita Federal)
+- ✅ Processamento PBKDF2 com 50.000 iterações por município
+- ✅ Agrupamento por UF (27 estados)
+- ✅ Geração de arquivos CSV e JSON por UF
 
-## 🚀 COMO CLONAR O REPOSITÓRIO
+### Transformações Assíncronas Aplicadas
 
+| Operação Original (Síncrona) | Operação Assíncrona | Benefício |
+|------------------------------|---------------------|------------|
+| `WebClient.DownloadFile` | `HttpClient.GetStringAsync` | Libera thread durante download |
+| `File.ReadAllLines` | `File.ReadAllLinesAsync` | I/O não-bloqueante |
+| Processamento serial por UF | `Task.WhenAll` + paralelismo | Múltiplas UFs simultâneas |
+| `File.WriteAllLines` | `File.WriteAllLinesAsync` | Escrita não-bloqueante |
+
+### Resultados de Performance
+
+| Métrica | Valor |
+|---------|-------|
+| **Municípios processados** | 5.571 |
+| **Total de UFs** | 27 |
+| **Iterações PBKDF2** | 50.000 por município |
+| **Tempo total (assíncrono)** | **1min 00s (60.9s)** |
+| **Ganho de performance** | **~42%** |
+
+### Como Executar
 ```bash
-# Clonar todas as branches
-git clone https://github.com/seu-usuario/projetos-csharp.git
+git checkout hands-on-06
+cd AsyncLab
+dotnet run
+```
 
-# Acessar uma branch específica
-git checkout hands-on-01  # Jokempo versão 1
-git checkout hands-on-02  # Jokempo versão 2
-git checkout hands-on-03  # Blackjack
-git checkout hands-on-05  # AgendaConsole
-git checkout hands-on-06  # GCLab
+### Saída esperada:
+```
+Baixando CSV de municípios (Receita Federal) - ASSÍNCRONO...
+Registros lidos: 5571
+Processando UF: AC (22 municípios) - INICIADO
+Processando UF: AL (102 municípios) - INICIADO
+...
+===== RESUMO =====
+UFs geradas: 27
+Tempo total: 1m 0s 922ms
 ```
 
 ---
 
-## 📊 STATUS DAS ENTREGAS
+## 🧠 CONCEITOS APLICADOS
 
-| Projeto | Branch | Data de Entrega | Status |
-|---------|--------|-----------------|--------|
-| Jokempo (Básico) | `hands-on-01` | 15/10/2026 | ✅ Concluído |
-| Jokempo (Avançado) | `hands-on-02` | 29/10/2026 | ✅ Concluído |
-| Blackjack | `hands-on-03` | 12/11/2026 | ✅ Concluído |
-| AgendaConsole | `hands-on-05` | 26/11/2026 | ✅ Concluído |
-| GCLab | `hands-on-06` | 10/12/2026 | ✅ Concluído |
+| Conceito | Jokempo V1 | Jokempo V2 | Blackjack | Agenda | GCLab | AsyncLab |
+|----------|:----------:|:----------:|:---------:|:------:|:-----:|:--------:|
+| **Classes e Objetos** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Métodos** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **If/Else** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Switch/Case** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **While/For** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Listas/Tipos Genéricos** | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Enumerações** | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ |
+| **Encapsulamento** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Tratamento de Exceções** | ❌ | ✅ | ❌ | ✅ | ✅ | ✅ |
+| **LINQ** | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
+| **TimeZoneInfo** | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
+| **Garbage Collection** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
+| **WeakReference** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
+| **IDisposable Pattern** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
+| **async/await** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **Task.WhenAll** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **Paralelismo** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 
 ---
 
-## 🛠️ TECNOLOGIAS UTILIZADAS
+## 🚀 COMO CLONAR E ACESSAR CADA PROJETO
 
-- **C#** - Linguagem de programação
-- **.NET 6/8** - Framework
-- **Git** - Controle de versão
-- **GitHub** - Repositório remoto
+```bash
+# Clonar o repositório
+git clone https://github.com/isadorameneghetti/hands-on-c/
+
+# Acessar cada branch
+git checkout hands-on-01  # Jokempo v1
+git checkout hands-on-02  # Jokempo v2
+git checkout hands-on-03  # Blackjack
+git checkout hands-on-05  # AgendaConsole
+git checkout hands-on-05.2 # GCLab
+git checkout hands-on-06  # AsyncLab
+```
 
 ---
 
@@ -303,6 +345,7 @@ git checkout hands-on-06  # GCLab
 - .NET SDK 6.0 ou superior
 - Windows / Linux / macOS
 - Git (para clonar o repositório)
+- Conexão com internet (AsyncLab apenas)
 
 ---
 
@@ -316,6 +359,7 @@ Durante o desenvolvimento dos projetos, foram trabalhados:
 4. **Coleções** - Uso de List, Dictionary, Queue, Stack
 5. **Fusos horários** - Conversão com TimeZoneInfo
 6. **Gerenciamento de Memória** - Garbage Collection, WeakReference, IDisposable
+7. **Programação Assíncrona** - async/await, Task.WhenAll, paralelismo
 
 ---
 
@@ -325,11 +369,12 @@ Durante o desenvolvimento dos projetos, foram trabalhados:
 - [.NET Download](https://dotnet.microsoft.com/download)
 - [Git Download](https://git-scm.com/downloads)
 - [Garbage Collection no .NET](https://learn.microsoft.com/pt-br/dotnet/standard/garbage-collection/)
+- [Programação Assíncrona](https://learn.microsoft.com/pt-br/dotnet/csharp/asynchronous-programming/)
 
 ---
 
 <p align="center">
   <b>FIAP - Faculdade de Informática e Administração Paulista</b><br>
-  Desenvolvido com ❤️ pelos alunos da turma 3ESA<br>
+  Desenvolvido com ❤️ por Isadora Meneghetti, Gustavo Ikeda, Henrique Azevedo, Renato Alvarenga e Victoria Moura<br>
   © 2026 - Todos os direitos reservados
 </p>
