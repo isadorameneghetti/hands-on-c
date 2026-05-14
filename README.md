@@ -242,22 +242,65 @@ logger: coletado
 ## ⚡ PROJETO 6: ASYNCLAB (hands-on-06)
 
 ### Sobre o Projeto
-Laboratório de Programação Assíncrona em C# - Comparação de performance entre código síncrono e assíncrono/paralelo.
+Laboratório de Programação Assíncrona em C# - Gerenciamento de arquivos, processamento paralelo e sistema de pesquisa.
 
-### Funcionalidades
-- ✅ Download do CSV de municípios (Receita Federal)
-- ✅ Processamento PBKDF2 com 50.000 iterações por município
-- ✅ Agrupamento por UF (27 estados)
-- ✅ Geração de arquivos CSV e JSON por UF
+### Funcionalidades Completas
 
-### Transformações Assíncronas Aplicadas
+| # | Funcionalidade | Descrição |
+|---|----------------|-----------|
+| **1** | **Verificação de arquivo** | Verifica se o CSV local existe antes de baixar |
+| **2** | **Backup automático** | Cria backup do arquivo antes de modificações |
+| **3** | **Modificações aleatórias** | Altera ~30% dos registros para simular dados corrompidos |
+| **4** | **Download atualizado** | Baixa nova versão do CSV da Receita Federal |
+| **5** | **Comparação de arquivos** | Compara versão local com oficial e gera relatório |
+| **6** | **Processamento PBKDF2** | Aplica 50.000 iterações de SHA-256 por município |
+| **7** | **Exportação multi-formato** | Salva por UF em CSV, JSON e formato binário |
+| **8** | **Pesquisa interativa** | Busca por UF, parte do nome ou código IBGE |
 
-| Operação Original (Síncrona) | Operação Assíncrona | Benefício |
-|------------------------------|---------------------|------------|
-| `WebClient.DownloadFile` | `HttpClient.GetStringAsync` | Libera thread durante download |
-| `File.ReadAllLines` | `File.ReadAllLinesAsync` | I/O não-bloqueante |
-| Processamento serial por UF | `Task.WhenAll` + paralelismo | Múltiplas UFs simultâneas |
-| `File.WriteAllLines` | `File.WriteAllLinesAsync` | Escrita não-bloqueante |
+### Fluxo de Execução
+
+```
+1. Verificar existência do arquivo municipios.csv
+   ├── SIM → Backup → Modificações aleatórias (30% dos registros)
+   └── NÃO → Segue para download
+
+2. Baixar nova versão (municipios_receita.csv)
+
+3. Comparar arquivos
+   └── Salvar diferenças em diferencas_municipios.csv
+
+4. Processar hashes PBKDF2 (50.000 iterações)
+
+5. Salvar por UF em 3 formatos:
+   ├── CSV  (municipios_hash_UF.csv)
+   ├── JSON (municipios_hash_UF.json)
+   └── BIN  (municipios_UF.bin) + TXT para debug
+
+6. Menu interativo de pesquisa:
+   ├── Pesquisar por UF
+   ├── Pesquisar por nome (parcial)
+   └── Pesquisar por código IBGE
+```
+
+### Estrutura de Arquivos Gerados
+
+```
+AsyncLab/
+├── backup/                              # Backups automáticos
+│   └── municipios_backup_YYYYMMDD_HHmmss.csv
+│
+├── mun_hash_por_uf/                     # CSV e JSON por UF
+│   ├── municipios_hash_AC.csv
+│   ├── municipios_hash_AC.json
+│   └── ... (27 UFs)
+│
+├── binario_por_uf/                      # Formato binário por UF
+│   ├── municipios_AC.bin
+│   ├── municipios_AC.txt   # Debug
+│   └── ...
+│
+└── diferencas_municipios.csv            # Relatório de diferenças
+```
 
 ### Resultados de Performance
 
@@ -266,26 +309,69 @@ Laboratório de Programação Assíncrona em C# - Comparação de performance en
 | **Municípios processados** | 5.571 |
 | **Total de UFs** | 27 |
 | **Iterações PBKDF2** | 50.000 por município |
-| **Tempo total (assíncrono)** | **1min 00s (60.9s)** |
-| **Ganho de performance** | **~42%** |
+| **Formatos de saída** | 3 por UF (CSV, JSON, BIN) |
+| **Tempo total** | ~1min 00s |
+| **Ganho assíncrono** | ~42% vs versão síncrona |
 
 ### Como Executar
+
 ```bash
 git checkout hands-on-06
 cd AsyncLab
 dotnet run
 ```
 
-### Saída esperada:
+### Exemplo de Saída
+
 ```
-Baixando CSV de municípios (Receita Federal) - ASSÍNCRONO...
-Registros lidos: 5571
-Processando UF: AC (22 municípios) - INICIADO
-Processando UF: AL (102 municípios) - INICIADO
-...
-===== RESUMO =====
-UFs geradas: 27
-Tempo total: 1m 0s 922ms
+=== ASYNCLAB - PROCESSAMENTO DE MUNICÍPIOS ===
+
+[1] Arquivo local encontrado. Fazendo backup...
+    Backup salvo em: backup/municipios_backup_20260514_143022.csv
+
+[2] Aplicando modificações aleatórias no arquivo local...
+    Modificações aplicadas com sucesso!
+
+[3] Baixando arquivo atualizado da Receita Federal...
+    Download concluído: municipios_receita.csv
+
+[4] Comparando arquivo local com o da Receita...
+    Diferenças encontradas: 1672
+    Arquivo de diferenças salvo em: diferencas_municipios.csv
+
+[5] Processando dados e gerando hashes...
+    Registros lidos: 5571
+
+[6] Salvando arquivos por UF em formato binário...
+    UF AC: 22 municípios salvos (CSV, JSON e BIN)
+    UF AL: 102 municípios salvos (CSV, JSON e BIN)
+    ...
+
+[7] Sistema de pesquisa de municípios
+========================================
+
+Opções de pesquisa:
+  1 - Pesquisar por UF
+  2 - Pesquisar por nome (parte do nome)
+  3 - Pesquisar por código IBGE
+  0 - Sair
+
+Escolha uma opção: 1
+Digite a UF (ex: SP, RJ, MG): SP
+
+============================================================
+📋 Municípios da UF SP
+============================================================
+Total encontrado: 645
+
+  3500105 | SP | Adamantina
+  3500204 | SP | Adolfo
+  ...
+
+===== RESUMO FINAL =====
+UFs processadas: 27
+Total de municípios: 5571
+✅ Laboratório concluído com sucesso!
 ```
 
 ---
@@ -303,7 +389,7 @@ Tempo total: 1m 0s 922ms
 | **Enumerações** | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ |
 | **Encapsulamento** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **Tratamento de Exceções** | ❌ | ✅ | ❌ | ✅ | ✅ | ✅ |
-| **LINQ** | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
+| **LINQ** | ❌ | ❌ | ❌ | ✅ | ❌ | ✅ |
 | **TimeZoneInfo** | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
 | **Garbage Collection** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
 | **WeakReference** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
@@ -311,6 +397,9 @@ Tempo total: 1m 0s 922ms
 | **async/await** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | **Task.WhenAll** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | **Paralelismo** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **Serialização Binária** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **Comparação de Arquivos** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **Backup e Versionamento** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 
 ---
 
@@ -318,7 +407,7 @@ Tempo total: 1m 0s 922ms
 
 ```bash
 # Clonar o repositório
-git clone https://github.com/isadorameneghetti/hands-on-c/
+git clone https://github.com/isadorameneghetti/hands-on-c.git
 
 # Acessar cada branch
 git checkout hands-on-01  # Jokempo v1
@@ -351,6 +440,9 @@ Durante o desenvolvimento dos projetos, foram trabalhados:
 5. **Fusos horários** - Conversão com TimeZoneInfo
 6. **Gerenciamento de Memória** - Garbage Collection, WeakReference, IDisposable
 7. **Programação Assíncrona** - async/await, Task.WhenAll, paralelismo
+8. **Serialização** - Formatos CSV, JSON e Binário
+9. **Versionamento** - Backup e comparação de versões de arquivos
+10. **Sistemas de Busca** - Pesquisa com múltiplos critérios
 
 ---
 
