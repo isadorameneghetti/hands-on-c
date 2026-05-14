@@ -1,12 +1,3 @@
-Ah, entendi! Vamos corrigir a estrutura:
-
-- `hands-on-05.2` = **GCLab** (Laboratório de Garbage Collection)
-- `hands-on-06` = **AsyncLab** (Laboratório de Programação Assíncrona)
-
-Aqui está o README corrigido:
-
----
-
 # 🎮 PROJETOS C# - JOKEMPO & BLACKJACK & AGENDA & GCLAB & ASYNCLAB
 
 ![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white)
