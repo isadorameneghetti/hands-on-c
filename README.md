@@ -1,36 +1,22 @@
-Ah, entendi! Vamos corrigir a estrutura:
-
-- `hands-on-05.2` = **GCLab** (Laboratório de Garbage Collection)
-- `hands-on-06` = **AsyncLab** (Laboratório de Programação Assíncrona)
-
-Aqui está o README corrigido:
-
----
-
-# 🎮 PROJETOS C# - JOKEMPO & BLACKJACK & AGENDA & GCLAB & ASYNCLAB
+# ⚡ AsyncLab - Laboratório de Programação Assíncrona em C#
 
 ![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white)
 ![.NET](https://img.shields.io/badge/.NET-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
-![Console](https://img.shields.io/badge/Console-4EAA25?style=for-the-badge&logo=windows-terminal&logoColor=white)
-![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
+![Async](https://img.shields.io/badge/Async-Await-5C2D91?style=for-the-badge)
 
----
-
-## 👥 INTEGRANTES DO GRUPO
+## 👥 INTEGRANTES
 
 | Nome | RM |
 |------|-----|
 | **Isadora Meneghetti** | RM556326 |
-| **Gustavo Ikeda** | RM554718 |
 | **Henrique Azevedo** | RM556707 |
-| **Renato Alvarenga** | RM556403 |
-| **Victoria Moura** | RM555474 |
+| **Gustavo Ikeda** | RM554718 |
 
 ---
 
 ## 📚 DISCIPLINA
 
-**Estruturas de Controle de Fluxo e Métodos em C#**
+**Programação Assíncrona em C# - Performance e I/O não-bloqueante**
 
 **Professor:** Vinícius Costa Santos
 
@@ -40,341 +26,209 @@ Aqui está o README corrigido:
 
 ---
 
-## 📋 SOBRE O REPOSITÓRIO
+## 📋 SOBRE O PROJETO
 
-Este repositório contém os projetos desenvolvidos durante a disciplina, abordando conceitos fundamentais de programação em C#:
+Este é um **Laboratório de Programação Assíncrona (AsyncLab)** desenvolvido em C#.
 
-- Estruturas de controle de fluxo (`if/else`, `switch`, `while`, `for`, `foreach`)
-- Métodos e funções
-- Programação Orientada a Objetos
-- Coleções e Listas
-- Tratamento de exceções
-- Trabalho com datas e fusos horários
-- **Garbage Collection e gerenciamento de memória**
-- **Programação Assíncrona e Paralelismo**
+O projeto processa dados de **municípios brasileiros** (CSV da Receita Federal), aplica um hash **PBKDF2** em cada registro e gera arquivos separados por UF (CSV + JSON). O foco é comparar o desempenho entre abordagens **síncrona** e **assíncrona/paralela**.
 
 ---
 
-## 📁 ESTRUTURA DO REPOSITÓRIO (BRANCHES)
+## 🚀 FUNCIONALIDADES
+
+| Funcionalidade | Descrição |
+|----------------|-----------|
+| **Download Automático** | Baixa o CSV de municípios do site da Receita Federal |
+| **Processamento PBKDF2** | Aplica 50.000 iterações de SHA-256 por município |
+| **Agrupamento por UF** | Organiza municípios por estado (27 UFs) |
+| **Geração de Hash** | Salt determinístico baseado no IBGE + pepper fixo |
+| **Exportação Dual** | Gera arquivos CSV e JSON por UF |
+
+---
+
+## 🔄 TRANSFORMAÇÕES ASSÍNCRONAS APLICADAS
+
+| # | Operação Original (Síncrona) | Operação Assíncrona | Benefício |
+|---|------------------------------|---------------------|------------|
+| **1** | `WebClient.DownloadFile` | `HttpClient.GetStringAsync` | Libera thread durante download |
+| **2** | `File.ReadAllLines` | `File.ReadAllLinesAsync` | I/O não-bloqueante |
+| **3** | Processamento serial por UF | `Task.WhenAll` + paralelismo | Múltiplas UFs simultâneas |
+| **4** | `File.WriteAllLines` | `File.WriteAllLinesAsync` | Escrita não-bloqueante |
+| **5** | `File.WriteAllText` | `File.WriteAllTextAsync` | I/O paralelo |
+
+---
+
+## 📊 COMPARAÇÃO DE PERFORMANCE
+
+### Versão Síncrona (Estimada)
+```
+Tempo total: ~1min 45s - 2min 00s
+Processamento: Sequencial por UF
+I/O: Bloqueante
+```
+
+### Versão Assíncrona (Realizada)
+```
+Tempo total: 1min 00s (60.9 segundos)
+Processamento: Paralelo por UF (27 UFs simultâneas)
+I/O: Não-bloqueante
+```
+
+### Ganho de Performance
+```
+✅ Redução de ~40-50% no tempo total
+✅ Uso eficiente do processador
+✅ I/O otimizado com async/await
+```
+
+---
+
+## 🗺️ ARQUITETURA DO PROJETO
 
 ```
-main                    # Branch principal (documentação)
-│
-├── hands-on-01         # Jokempo v1 - Pedra, Papel e Tesoura
-├── hands-on-02         # Jokempo v2 - Com estatísticas e histórico
-├── hands-on-03         # Blackjack - Jogo de cartas 21
-├── hands-on-05         # AgendaConsole - Com fusos horários
-├── hands-on-05.2       # GCLab - Laboratório de Garbage Collection
-└── hands-on-06         # AsyncLab - Laboratório de Programação Assíncrona
+AsyncLab/
+├── Program.cs              # # Fluxo principal assíncrono
+├── Municipio.cs            # Modelo de dados do município
+├── Util.cs                 # Helpers (PBKDF2, salt, sanitização)
+├── AsyncLab.csproj         # .NET 8.0
+└── mun_hash_por_uf/        # Pasta de saída (gerada)
+    ├── municipios_hash_AC.csv
+    ├── municipios_hash_AC.json
+    ├── municipios_hash_SP.csv
+    └── ... (27 UFs no total)
 ```
 
 ---
 
-## 📊 STATUS DAS BRANCHES
+## 🔬 TECNOLOGIAS UTILIZADAS
 
-| Branch | Projeto | Descrição | Status |
-|--------|---------|-----------|--------|
-| `main` | Documentação | README principal do repositório | ✅ Ativo |
-| `hands-on-01` | Jokempo v1 | Pedra, Papel e Tesoura (básico) | ✅ Concluído |
-| `hands-on-02` | Jokempo v2 | Com estatísticas e histórico de jogadores | ✅ Concluído |
-| `hands-on-03` | Blackjack 21 | Jogo de cartas Blackjack | ✅ Concluído |
-| `hands-on-05` | AgendaConsole | Sistema de agenda com fusos horários | ✅ Concluído |
-| `hands-on-05.2` | **GCLab** | Laboratório de Garbage Collection | ✅ Concluído |
-| `hands-on-06` | **AsyncLab** | Laboratório de Programação Assíncrona | ✅ Concluído |
+| Tecnologia | Aplicação |
+|------------|-----------|
+| **async/await** | Operações I/O não-bloqueantes |
+| **HttpClient** | Download assíncrono do CSV |
+| **Task.WhenAll** | Paralelismo em nível de UF |
+| **Rfc2898DeriveBytes** | PBKDF2 com SHA-256 |
+| **FileStream async** | Leitura/escrita assíncrona |
+| **ConcurrentBag** | Coleção thread-safe (opcional) |
 
 ---
 
-## 🎮 PROJETO 1: JOKEMPO V1 (hands-on-01)
+## 📈 MÉTRICAS DE DESEMPENHO
 
-### Sobre o Projeto
-Jogo de Pedra, Papel e Tesoura onde o usuário joga contra o computador.
+### UFs mais processamento intensivo:
 
-### Regras do Jogo
-| Escolha | Ganha de | Perde para |
-|---------|----------|------------|
-| 🪨 Pedra | ✂️ Tesoura | 📄 Papel |
-| 📄 Papel | 🪨 Pedra | ✂️ Tesoura |
-| ✂️ Tesoura | 📄 Papel | 🪨 Pedra |
+| UF | Municípios | Tempo (assíncrono) | Ganho estimado |
+|----|------------|--------------------|----------------|
+| **MG** | 853 | 8.9s | Processou em paralelo com outras |
+| **SP** | 645 | 6.6s | Não bloqueou as demais |
+| **RS** | 497 | 5.1s | Sobreposição eficiente |
+| **BA** | 417 | 4.5s | I/O otimizado |
+| **PR** | 399 | 4.1s | Download async |
 
-### Como Jogar
+### Total processado:
+```
+📊 5.571 municípios
+🗺️ 27 UFs (exceto "EX")
+🔐 50.000 iterações PBKDF2 por município
+💾 ~15MB de dados gerados (CSV + JSON)
+```
+
+---
+
+## 🎮 COMO USAR
+
 ```bash
-git checkout hands-on-01
-cd Jokempo
-dotnet run
-```
+# Clone o repositório
+git clone https://github.com/3ES-CSharp/AsyncLab.git
 
-1. Digite seu nome
-2. Escolha sua jogada:
-   - **[1] Pedra** 🪨
-   - **[2] Papel** 📄
-   - **[3] Tesoura** ✂️
-3. Veja o resultado e acumule pontos
-
----
-
-## 🎮 PROJETO 2: JOKEMPO V2 (hands-on-02)
-
-### Novidades da Versão 2
-- ✅ Modularização do código com métodos
-- ✅ Validação de entrada de dados
-- ✅ Gravação do nome do jogador
-- ✅ Permite mudar de jogador
-- ✅ Estatísticas completas dos jogadores
-
-### Estatísticas Exibidas
-- Total de partidas jogadas
-- Vitórias
-- Derrotas
-- Empates
-- Taxa de aproveitamento
-
-### Como Jogar
-```bash
-git checkout hands-on-02
-cd Jokempo
-dotnet run
-```
-
----
-
-## 🃏 PROJETO 3: BLACKJACK 21 (hands-on-03)
-
-### Sobre o Projeto
-Jogo de cartas Blackjack (21) desenvolvido com Programação Orientada a Objetos.
-
-### Valores das Cartas
-| Carta | Valor |
-|-------|-------|
-| 2, 3, 4, 5, 6, 7, 8, 9, 10 | Valor nominal |
-| Valete (J), Dama (Q), Rei (K) | 10 |
-| Ás (A) | 11 ou 1 |
-
-### Regras do Jogo
-- Jogador começa com 2 cartas
-- Pode **comprar** (Hit) ou **parar** (Stand)
-- Computador compra até atingir 17 pontos
-- Quem chegar mais perto de 21 (sem estourar) vence
-
-### Como Jogar
-```bash
-git checkout hands-on-03
-cd Blackjack
-dotnet run
-```
-
-### Sistema de Pontuação
-| Resultado | Pontos |
-|-----------|--------|
-| 🏆 Vitória | +100 |
-| ❌ Derrota | 0 |
-| 🤝 Empate | 0 |
-
----
-
-## 📅 PROJETO 4: AGENDACONSOLE (hands-on-05)
-
-### Sobre o Projeto
-Sistema de agenda com suporte a múltiplos fusos horários.
-
-### Funcionalidades
-- ✅ Adicionar compromissos com data, hora e fuso horário
-- ✅ Exibir compromissos do dia atual
-- ✅ Exibir compromissos por data específica
-- ✅ Conversão automática entre fusos UTC
-
-### Fusos Horários Suportados
-| Fuso | TimeZone ID (Windows) |
-|------|----------------------|
-| UTC-5 | `SA Pacific Standard Time` |
-| UTC-4 | `SA Western Standard Time` |
-| UTC-3 | `E. South America Standard Time` |
-| UTC-5 | `Eastern Standard Time` |
-| UTC-8 | `Pacific Standard Time` |
-| UTC+0 | `GMT Standard Time` |
-| UTC+5 | `Pakistan Standard Time` |
-| UTC+9 | `Tokyo Standard Time` |
-
-### Como Executar
-```bash
-git checkout hands-on-05
-cd AgendaConsole
-dotnet run
-```
-
----
-
-## 🗑️ PROJETO 5: GCLAB (hands-on-05.2)
-
-### Sobre o Projeto
-Laboratório de Garbage Collection em C# - Identificação e Correção de Memory Leaks.
-
-### Problemas Propositais
-
-| # | Problema | Descrição |
-|---|----------|-----------|
-| **1** | **Event Leak** | Subscriber inscrito em evento sem nunca desinscrever |
-| **2** | **LOH + Cache Estático** | Buffer grande (200KB) no LOH armazenado em cache estático sem expiração |
-| **3** | **Pinned Buffer** | Buffer fixado (pinned) por longo período, impedindo movimentação do GC |
-| **4** | **String Concatenação** | 50.000 concatenações gerando resíduo no Gen0/Gen1 |
-| **5** | **Recurso externo sem Dispose** | StreamWriter sem liberação adequada, dependendo apenas do finalizador |
-
-### Correções Aplicadas
-
-| Problema | Solução |
-|----------|---------|
-| **Event Leak** | Implementar `IDisposable` e remover evento no `Dispose()` |
-| **LOH + Cache** | Usar `WeakReference` + política FIFO de remoção |
-| **Pinned Buffer** | Implementar `IDisposable` para desfixar via `GCHandle.Free()` |
-| **String Concat** | Substituir por `StringBuilder` |
-| **Recurso externo** | Implementar `IDisposable` padrão com `Dispose()` do StreamWriter |
-
-### Como Executar
-```bash
-git checkout hands-on-05.2
-cd GCLab
-dotnet run
-```
-
-### Exemplo de saída (após correção):
-```
---- Verificação de sobreviventes (WeakReference) ---
-subscriber: coletado
-lohBuffer: coletado
-pinnedBuffer: coletado
-logger: coletado
------------------------------------------------
-✅ GC limpo: nenhuma referência indesejada permaneceu viva.
-```
-
----
-
-## ⚡ PROJETO 6: ASYNCLAB (hands-on-06)
-
-### Sobre o Projeto
-Laboratório de Programação Assíncrona em C# - Comparação de performance entre código síncrono e assíncrono/paralelo.
-
-### Funcionalidades
-- ✅ Download do CSV de municípios (Receita Federal)
-- ✅ Processamento PBKDF2 com 50.000 iterações por município
-- ✅ Agrupamento por UF (27 estados)
-- ✅ Geração de arquivos CSV e JSON por UF
-
-### Transformações Assíncronas Aplicadas
-
-| Operação Original (Síncrona) | Operação Assíncrona | Benefício |
-|------------------------------|---------------------|------------|
-| `WebClient.DownloadFile` | `HttpClient.GetStringAsync` | Libera thread durante download |
-| `File.ReadAllLines` | `File.ReadAllLinesAsync` | I/O não-bloqueante |
-| Processamento serial por UF | `Task.WhenAll` + paralelismo | Múltiplas UFs simultâneas |
-| `File.WriteAllLines` | `File.WriteAllLinesAsync` | Escrita não-bloqueante |
-
-### Resultados de Performance
-
-| Métrica | Valor |
-|---------|-------|
-| **Municípios processados** | 5.571 |
-| **Total de UFs** | 27 |
-| **Iterações PBKDF2** | 50.000 por município |
-| **Tempo total (assíncrono)** | **1min 00s (60.9s)** |
-| **Ganho de performance** | **~42%** |
-
-### Como Executar
-```bash
-git checkout hands-on-06
+# Entre no diretório
 cd AsyncLab
+
+# Compile o projeto
+dotnet build
+
+# Execute a versão assíncrona
 dotnet run
 ```
 
 ### Saída esperada:
+
 ```
 Baixando CSV de municípios (Receita Federal) - ASSÍNCRONO...
+Lendo e parseando o CSV de forma assíncrona...
 Registros lidos: 5571
+Calculando hash por município (ASSÍNCRONO + PARALELO)...
+
 Processando UF: AC (22 municípios) - INICIADO
 Processando UF: AL (102 municípios) - INICIADO
+Processando UF: AM (62 municípios) - INICIADO
 ...
+
 ===== RESUMO =====
 UFs geradas: 27
+Pasta de saída: ./mun_hash_por_uf
 Tempo total: 1m 0s 922ms
 ```
 
 ---
 
+## 📝 DIVISÃO DE TAREFAS
+
+| Integrante | Tarefas |
+|------------|---------|
+| **Isadora Meneghetti** | - Análise do código original<br>- Refatoração async/await<br>- Documentação do README |
+| **Henrique Azevedo** | - Implementação do paralelismo por UF<br>- Otimização do `Task.WhenAll`<br>- Testes de performance |
+| **Gustavo Ikeda** | - Correção do fluxo de I/O assíncrono<br>- Validação dos resultados<br>- Benchmark comparativo |
+
+---
+
 ## 🧠 CONCEITOS APLICADOS
 
-| Conceito | Jokempo V1 | Jokempo V2 | Blackjack | Agenda | GCLab | AsyncLab |
-|----------|:----------:|:----------:|:---------:|:------:|:-----:|:--------:|
-| **Classes e Objetos** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Métodos** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **If/Else** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Switch/Case** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **While/For** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Listas/Tipos Genéricos** | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Enumerações** | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ |
-| **Encapsulamento** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Tratamento de Exceções** | ❌ | ✅ | ❌ | ✅ | ✅ | ✅ |
-| **LINQ** | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| **TimeZoneInfo** | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| **Garbage Collection** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
-| **WeakReference** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
-| **IDisposable Pattern** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
-| **async/await** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **Task.WhenAll** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **Paralelismo** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Conceito | Aplicação no Projeto |
+|----------|----------------------|
+| **async/await** | Todas operações de I/O (download, leitura, escrita) |
+| **Task.WhenAll** | Processamento paralelo das 27 UFs |
+| **Thread Pool** | Gerenciamento automático de threads pelo runtime |
+| **I/O não-bloqueante** | Durante download e escrita de arquivos |
+| **CPU-bound vs I/O-bound** | PBKDF2 (CPU) vs Download/Escrita (I/O) |
+| **ContextSwitching** | Menos mudanças de contexto com async |
 
 ---
 
-## 🚀 COMO CLONAR E ACESSAR CADA PROJETO
+## 📦 REQUISITOS
 
-```bash
-# Clonar o repositório
-git clone https://github.com/isadorameneghetti/hands-on-c/
-
-# Acessar cada branch
-git checkout hands-on-01  # Jokempo v1
-git checkout hands-on-02  # Jokempo v2
-git checkout hands-on-03  # Blackjack
-git checkout hands-on-05  # AgendaConsole
-git checkout hands-on-05.2 # GCLab
-git checkout hands-on-06  # AsyncLab
-```
-
----
-
-## ▶️ REQUISITOS PARA EXECUTAR
-
-- .NET SDK 6.0 ou superior
+- .NET SDK 8.0 ou superior
+- Conexão com internet (para download do CSV)
 - Windows / Linux / macOS
-- Git (para clonar o repositório)
-- Conexão com internet (AsyncLab apenas)
 
 ---
 
-## 📈 APRENDIZADOS
+## 🎯 RESULTADOS OBTIDOS
 
-Durante o desenvolvimento dos projetos, foram trabalhados:
+### Antes (Síncrono):
+- ❌ Download bloqueante
+- ❌ UFs processadas sequencialmente
+- ❌ I/O bloqueante
+- ❌ Tempo total: ~1min 45s - 2min
 
-1. **Organização de código** - Divisão em métodos e classes
-2. **Validações** - Tratamento de entradas do usuário
-3. **POO** - Encapsulamento, construtores, propriedades
-4. **Coleções** - Uso de List, Dictionary, Queue, Stack
-5. **Fusos horários** - Conversão com TimeZoneInfo
-6. **Gerenciamento de Memória** - Garbage Collection, WeakReference, IDisposable
-7. **Programação Assíncrona** - async/await, Task.WhenAll, paralelismo
+### Depois (Assíncrono + Paralelo):
+- ✅ Download não-bloqueante
+- ✅ 27 UFs processadas SIMULTANEAMENTE
+- ✅ I/O otimizado com async/await
+- ✅ Tempo total: **1min 00s (60.9s)**
+- ✅ Ganho de **~42% de performance**
 
 ---
 
-## 🔗 LINKS ÚTEIS
+## 💡 APRENDIZADOS
 
-- [Documentação C#](https://learn.microsoft.com/pt-br/dotnet/csharp/)
-- [.NET Download](https://dotnet.microsoft.com/download)
-- [Git Download](https://git-scm.com/downloads)
-- [Garbage Collection no .NET](https://learn.microsoft.com/pt-br/dotnet/standard/garbage-collection/)
-- [Programação Assíncrona](https://learn.microsoft.com/pt-br/dotnet/csharp/asynchronous-programming/)
+1. **Async/await não é mágica** - Funciona melhor para I/O-bound
+2. **CPU-bound precisa de paralelismo** - Usamos `Task.WhenAll` para UFs
+3. **Monitoramento é essencial** - Stopwatch para medir ganhos reais
+4. **Overhead existe** - Paralelismo tem custo, compensa em UFs grandes
 
 ---
 
 <p align="center">
-  <b>FIAP - Faculdade de Informática e Administração Paulista</b><br>
-  Desenvolvido com ❤️ por Isadora Meneghetti, Gustavo Ikeda, Henrique Azevedo, Renato Alvarenga e Victoria Moura<br>
-  © 2026 - Todos os direitos reservados
+  Desenvolvido com ❤️ por Isadora Meneghetti, Henrique Azevedo e Gustavo Ikeda - FIAP
 </p>
