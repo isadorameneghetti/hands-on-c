@@ -30,72 +30,93 @@
 
 Este é um **Laboratório de Programação Assíncrona (AsyncLab)** desenvolvido em C#.
 
-O projeto processa dados de **municípios brasileiros** (CSV da Receita Federal), aplica um hash **PBKDF2** em cada registro e gera arquivos separados por UF (CSV + JSON). O foco é comparar o desempenho entre abordagens **síncrona** e **assíncrona/paralela**.
+O projeto processa dados de **municípios brasileiros** (CSV da Receita Federal) com os seguintes objetivos:
+
+- Aplicar hash **PBKDF2** em cada registro
+- Gerenciar versões de arquivos (backup, modificações, comparação)
+- Salvar dados em **múltiplos formatos** (CSV, JSON e BINÁRIO)
+- Implementar **sistema de pesquisa** interativo
 
 ---
 
 ## 🚀 FUNCIONALIDADES
 
-| Funcionalidade | Descrição |
-|----------------|-----------|
-| **Download Automático** | Baixa o CSV de municípios do site da Receita Federal |
-| **Processamento PBKDF2** | Aplica 50.000 iterações de SHA-256 por município |
-| **Agrupamento por UF** | Organiza municípios por estado (27 UFs) |
-| **Geração de Hash** | Salt determinístico baseado no IBGE + pepper fixo |
-| **Exportação Dual** | Gera arquivos CSV e JSON por UF |
+| # | Funcionalidade | Descrição |
+|---|----------------|-----------|
+| **1** | **Verificação de arquivo** | Verifica se o CSV local existe antes de baixar |
+| **2** | **Backup automático** | Cria backup do arquivo antes de modificações |
+| **3** | **Modificações aleatórias** | Altera ~30% dos registros para simular dados corrompidos |
+| **4** | **Download atualizado** | Baixa nova versão do CSV da Receita Federal |
+| **5** | **Comparação de arquivos** | Compara versão local com oficial e gera relatório de diferenças |
+| **6** | **Processamento PBKDF2** | Aplica 50.000 iterações de SHA-256 por município |
+| **7** | **Exportação multi-formato** | Salva por UF em CSV, JSON e formato binário |
+| **8** | **Pesquisa interativa** | Busca por UF, parte do nome ou código IBGE |
 
 ---
 
-## 🔄 TRANSFORMAÇÕES ASSÍNCRONAS APLICADAS
+## 🔄 FLUXO DE EXECUÇÃO
 
-| # | Operação Original (Síncrona) | Operação Assíncrona | Benefício |
-|---|------------------------------|---------------------|------------|
-| **1** | `WebClient.DownloadFile` | `HttpClient.GetStringAsync` | Libera thread durante download |
-| **2** | `File.ReadAllLines` | `File.ReadAllLinesAsync` | I/O não-bloqueante |
-| **3** | Processamento serial por UF | `Task.WhenAll` + paralelismo | Múltiplas UFs simultâneas |
-| **4** | `File.WriteAllLines` | `File.WriteAllLinesAsync` | Escrita não-bloqueante |
-| **5** | `File.WriteAllText` | `File.WriteAllTextAsync` | I/O paralelo |
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    ASYNCLAB - FLUXO COMPLETO                 │
+└─────────────────────────────────────────────────────────────┘
+
+1. Verificar existência do arquivo municipios.csv
+   │
+   ├── SIM → Fazer backup → Aplicar modificações aleatórias
+   │
+   └── NÃO → Seguir para download
+
+2. Baixar nova versão (municipios_receita.csv)
+
+3. Comparar arquivos
+   │
+   └── Salvar diferenças em diferencas_municipios.csv
+
+4. Processar hashes PBKDF2 (50.000 iterações)
+
+5. Salvar por UF em 3 formatos:
+   │
+   ├── CSV  (municipios_hash_UF.csv)
+   ├── JSON (municipios_hash_UF.json)
+   └── BIN  (municipios_UF.bin) + TXT para debug
+
+6. Menu interativo de pesquisa:
+   │
+   ├── Pesquisar por UF
+   ├── Pesquisar por nome (parcial)
+   └── Pesquisar por código IBGE
+```
 
 ---
 
-## 📊 COMPARAÇÃO DE PERFORMANCE
-
-### Versão Síncrona (Estimada)
-```
-Tempo total: ~1min 45s - 2min 00s
-Processamento: Sequencial por UF
-I/O: Bloqueante
-```
-
-### Versão Assíncrona (Realizada)
-```
-Tempo total: 1min 00s (60.9 segundos)
-Processamento: Paralelo por UF (27 UFs simultâneas)
-I/O: Não-bloqueante
-```
-
-### Ganho de Performance
-```
-✅ Redução de ~40-50% no tempo total
-✅ Uso eficiente do processador
-✅ I/O otimizado com async/await
-```
-
----
-
-## 🗺️ ARQUITETURA DO PROJETO
+## 📁 ESTRUTURA DO PROJETO
 
 ```
 AsyncLab/
-├── Program.cs              # # Fluxo principal assíncrono
+├── Program.cs              # Fluxo principal (todos os requisitos)
 ├── Municipio.cs            # Modelo de dados do município
 ├── Util.cs                 # Helpers (PBKDF2, salt, sanitização)
+├── DataModifier.cs         # Modificações aleatórias no CSV
+├── FileComparer.cs         # Comparação entre arquivos
+├── BinaryStorage.cs        # Serialização binária por UF
+├── SearchEngine.cs         # Sistema de pesquisa de municípios
 ├── AsyncLab.csproj         # .NET 8.0
-└── mun_hash_por_uf/        # Pasta de saída (gerada)
-    ├── municipios_hash_AC.csv
-    ├── municipios_hash_AC.json
-    ├── municipios_hash_SP.csv
-    └── ... (27 UFs no total)
+│
+├── backup/                 # Backups automáticos
+│   └── municipios_backup_YYYYMMDD_HHmmss.csv
+│
+├── mun_hash_por_uf/        # CSV e JSON por UF
+│   ├── municipios_hash_AC.csv
+│   ├── municipios_hash_AC.json
+│   └── ...
+│
+├── binario_por_uf/         # Formato binário por UF
+│   ├── municipios_AC.bin
+│   ├── municipios_AC.txt   # Debug
+│   └── ...
+│
+└── diferencas_municipios.csv  # Relatório de diferenças
 ```
 
 ---
@@ -106,69 +127,174 @@ AsyncLab/
 |------------|-----------|
 | **async/await** | Operações I/O não-bloqueantes |
 | **HttpClient** | Download assíncrono do CSV |
-| **Task.WhenAll** | Paralelismo em nível de UF |
+| **BinaryFormatter** | Serialização binária dos dados |
 | **Rfc2898DeriveBytes** | PBKDF2 com SHA-256 |
 | **FileStream async** | Leitura/escrita assíncrona |
-| **ConcurrentBag** | Coleção thread-safe (opcional) |
+| **LINQ** | Consultas e agrupamentos |
+| **Random** | Modificações aleatórias |
 
 ---
 
-## 📈 MÉTRICAS DE DESEMPENHO
+## 💻 CÓDIGOS IMPLEMENTADOS
+
+### DataModifier.cs - Modificações Aleatórias
+```csharp
+// Aplica modificações em ~30% dos registros
+if (_random.NextDouble() < 0.3)
+{
+    parts[2] = parts[2] + " [MODIFICADO]";
+    parts[3] = parts[3] + " [MODIFICADO]";
+}
+```
+
+### FileComparer.cs - Comparação de Arquivos
+```csharp
+// Compara linha por linha e identifica diferenças
+if (linhaLocal != linhaReceita)
+{
+    diferencas.Add($"Linha {i+1} | Local: {nomeLocal} | Receita: {nomeReceita}");
+}
+```
+
+### BinaryStorage.cs - Armazenamento Binário
+```csharp
+// Serializa dados em formato binário
+var formatter = new BinaryFormatter();
+formatter.Serialize(fs, data);
+```
+
+### SearchEngine.cs - Sistema de Pesquisa
+```csharp
+// Pesquisa por UF, nome ou código IBGE
+public static List<Municipio> SearchByUf(List<Municipio> municipios, string uf)
+public static List<Municipio> SearchByName(List<Municipio> municipios, string termo)
+public static Municipio? SearchByIbge(List<Municipio> municipios, string ibge)
+```
+
+---
+
+## 📊 MÉTRICAS DE DESEMPENHO
+
+### Processamento Realizado:
+```
+📊 5.571 municípios processados
+🗺️ 27 UFs (exceto "EX")
+🔐 50.000 iterações PBKDF2 por município
+💾 3 formatos de saída por UF (CSV, JSON, BIN)
+📁 ~20MB de dados gerados no total
+```
 
 ### UFs mais processamento intensivo:
 
-| UF | Municípios | Tempo (assíncrono) | Ganho estimado |
-|----|------------|--------------------|----------------|
-| **MG** | 853 | 8.9s | Processou em paralelo com outras |
-| **SP** | 645 | 6.6s | Não bloqueou as demais |
-| **RS** | 497 | 5.1s | Sobreposição eficiente |
-| **BA** | 417 | 4.5s | I/O otimizado |
-| **PR** | 399 | 4.1s | Download async |
-
-### Total processado:
-```
-📊 5.571 municípios
-🗺️ 27 UFs (exceto "EX")
-🔐 50.000 iterações PBKDF2 por município
-💾 ~15MB de dados gerados (CSV + JSON)
-```
+| UF | Municípios | Tempo estimado |
+|----|------------|----------------|
+| **MG** | 853 | ~9s |
+| **SP** | 645 | ~7s |
+| **RS** | 497 | ~5s |
+| **BA** | 417 | ~5s |
+| **PR** | 399 | ~4s |
 
 ---
 
 ## 🎮 COMO USAR
 
 ```bash
-# Clone o repositório
-git clone https://github.com/3ES-CSharp/AsyncLab.git
-
 # Entre no diretório
 cd AsyncLab
 
 # Compile o projeto
 dotnet build
 
-# Execute a versão assíncrona
+# Execute o programa
 dotnet run
 ```
 
 ### Saída esperada:
 
 ```
-Baixando CSV de municípios (Receita Federal) - ASSÍNCRONO...
-Lendo e parseando o CSV de forma assíncrona...
-Registros lidos: 5571
-Calculando hash por município (ASSÍNCRONO + PARALELO)...
+=== ASYNCLAB - PROCESSAMENTO DE MUNICÍPIOS ===
 
-Processando UF: AC (22 municípios) - INICIADO
-Processando UF: AL (102 municípios) - INICIADO
-Processando UF: AM (62 municípios) - INICIADO
-...
+[1] Arquivo local encontrado. Fazendo backup...
+    Backup salvo em: backup/municipios_backup_20260514_143022.csv
 
-===== RESUMO =====
-UFs geradas: 27
-Pasta de saída: ./mun_hash_por_uf
-Tempo total: 1m 0s 922ms
+[2] Aplicando modificações aleatórias no arquivo local...
+    Modificações aplicadas com sucesso!
+
+[3] Baixando arquivo atualizado da Receita Federal...
+    Download concluído: municipios_receita.csv
+
+[4] Comparando arquivo local com o da Receita...
+    Diferenças encontradas: 1672
+    Arquivo de diferenças salvo em: diferencas_municipios.csv
+
+    Primeiras diferenças:
+      Linha 15 | IBGE: 1200013 | Local: Rio Branco [MODIFICADO] | Receita: Rio Branco
+      Linha 32 | IBGE: 1200104 | Local: Xapuri [MODIFICADO] | Receita: Xapuri
+      ...
+
+[5] Processando dados e gerando hashes...
+    Registros lidos: 5571
+
+[6] Salvando arquivos por UF em formato binário...
+    UF AC: 22 municípios salvos (CSV, JSON e BIN)
+    UF AL: 102 municípios salvos (CSV, JSON e BIN)
+    ...
+
+[7] Sistema de pesquisa de municípios
+========================================
+
+Opções de pesquisa:
+  1 - Pesquisar por UF
+  2 - Pesquisar por nome (parte do nome)
+  3 - Pesquisar por código IBGE
+  0 - Sair
+
+Escolha uma opção:
 ```
+
+### Exemplo de Pesquisa:
+
+```
+Escolha uma opção: 1
+Digite a UF (ex: SP, RJ, MG): SP
+
+============================================================
+📋 Municípios da UF SP
+============================================================
+Total encontrado: 645
+
+  3500105 | SP | Adamantina
+  3500204 | SP | Adolfo
+  3500303 | SP | Aguaí
+  ...
+
+============================================================
+===== RESUMO FINAL =====
+UFs processadas: 27
+Total de municípios: 5571
+Pasta de saída (CSV/JSON): ./mun_hash_por_uf
+Pasta de saída (Binário): ./binario_por_uf
+Arquivo de diferenças: ./diferencas_municipios.csv
+
+✅ Laboratório concluído com sucesso!
+```
+
+---
+
+## ✅ VALIDAÇÃO DOS REQUISITOS
+
+| # | Requisito | Status | Implementação |
+|---|-----------|--------|----------------|
+| 1 | Verificar existência do arquivo base | ✅ | `File.Exists()` |
+| 2 | Backup antes de modificar | ✅ | `File.Copy()` com timestamp |
+| 3 | Alterações aleatórias | ✅ | `DataModifier.cs` (30% dos registros) |
+| 4 | Baixar nova versão da Receita | ✅ | `HttpClient.GetStringAsync()` |
+| 5 | Comparar arquivos | ✅ | `FileComparer.cs` |
+| 6 | Salvar diferenças | ✅ | `diferencas_municipios.csv` |
+| 7 | Salvar por UF em formato binário | ✅ | `BinaryStorage.cs` |
+| 8 | Pesquisa por UF | ✅ | `SearchEngine.SearchByUf()` |
+| 9 | Pesquisa por parte do nome | ✅ | `SearchEngine.SearchByName()` |
+| 10 | Pesquisa por código IBGE | ✅ | `SearchEngine.SearchByIbge()` |
 
 ---
 
@@ -176,9 +302,9 @@ Tempo total: 1m 0s 922ms
 
 | Integrante | Tarefas |
 |------------|---------|
-| **Isadora Meneghetti** | - Análise do código original<br>- Refatoração async/await<br>- Documentação do README |
-| **Henrique Azevedo** | - Implementação do paralelismo por UF<br>- Otimização do `Task.WhenAll`<br>- Testes de performance |
-| **Gustavo Ikeda** | - Correção do fluxo de I/O assíncrono<br>- Validação dos resultados<br>- Benchmark comparativo |
+| **Isadora Meneghetti** | - Análise dos requisitos<br>- Implementação do fluxo principal<br>- Sistema de pesquisa<br>- Documentação do README |
+| **Henrique Azevedo** | - Implementação do `DataModifier`<br>- Implementação do `FileComparer`<br>- Testes de comparação de arquivos |
+| **Gustavo Ikeda** | - Implementação do `BinaryStorage`<br>- Serialização binária<br>- Validação dos resultados |
 
 ---
 
@@ -186,12 +312,14 @@ Tempo total: 1m 0s 922ms
 
 | Conceito | Aplicação no Projeto |
 |----------|----------------------|
-| **async/await** | Todas operações de I/O (download, leitura, escrita) |
-| **Task.WhenAll** | Processamento paralelo das 27 UFs |
-| **Thread Pool** | Gerenciamento automático de threads pelo runtime |
-| **I/O não-bloqueante** | Durante download e escrita de arquivos |
-| **CPU-bound vs I/O-bound** | PBKDF2 (CPU) vs Download/Escrita (I/O) |
-| **ContextSwitching** | Menos mudanças de contexto com async |
+| **async/await** | Download, leitura e escrita de arquivos |
+| **I/O não-bloqueante** | Durante todas operações de arquivo |
+| **Serialização binária** | `BinaryFormatter` para salvar dados por UF |
+| **Comparação de arquivos** | Detecção de mudanças linha a linha |
+| **Backup e versão** | Timestamp nos arquivos de backup |
+| **Modificação controlada** | `Random` para simular dados corrompidos |
+| **LINQ** | Agrupamentos, ordenações e buscas |
+| **PBKDF2** | Derivação de hash com 50k iterações |
 
 ---
 
@@ -205,27 +333,29 @@ Tempo total: 1m 0s 922ms
 
 ## 🎯 RESULTADOS OBTIDOS
 
-### Antes (Síncrono):
-- ❌ Download bloqueante
-- ❌ UFs processadas sequencialmente
-- ❌ I/O bloqueante
-- ❌ Tempo total: ~1min 45s - 2min
+### Funcionalidades Implementadas:
+- ✅ Backup automático antes de modificações
+- ✅ Modificações aleatórias para simular corrupção
+- ✅ Download da versão oficial
+- ✅ Comparação detalhada entre versões
+- ✅ Exportação em 3 formatos diferentes (CSV, JSON, BIN)
+- ✅ Pesquisa interativa com 3 critérios diferentes
 
-### Depois (Assíncrono + Paralelo):
-- ✅ Download não-bloqueante
-- ✅ 27 UFs processadas SIMULTANEAMENTE
-- ✅ I/O otimizado com async/await
-- ✅ Tempo total: **1min 00s (60.9s)**
-- ✅ Ganho de **~42% de performance**
+### Qualidade do Código:
+- ✅ Código assíncrono em todas operações de I/O
+- ✅ Separação de responsabilidades em classes específicas
+- ✅ Tratamento de exceções implícito
+- ✅ Logging informativo para o usuário
 
 ---
 
 ## 💡 APRENDIZADOS
 
-1. **Async/await não é mágica** - Funciona melhor para I/O-bound
-2. **CPU-bound precisa de paralelismo** - Usamos `Task.WhenAll` para UFs
-3. **Monitoramento é essencial** - Stopwatch para medir ganhos reais
-4. **Overhead existe** - Paralelismo tem custo, compensa em UFs grandes
+1. **Gerenciamento de versões** - Backup e comparação são essenciais para integridade de dados
+2. **Múltiplos formatos** - Cada formato tem sua utilidade (CSV para planilhas, JSON para APIs, BIN para performance)
+3. **Serialização binária** - Mais rápida e compacta, mas menos interoperável
+4. **Pesquisa eficiente** - LINQ proporciona consultas flexíveis e performáticas
+5. **Async em todo I/O** - Melhora responsividade mesmo em operações locais
 
 ---
 
