@@ -1,27 +1,20 @@
-# 🎮 PROJETOS C# - JOKEMPO & BLACKJACK & AGENDA & GCLAB & ASYNCLAB
+## 🗄️ ADOLab - Laboratório de ADO.NET em C#
 
 ![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white)
 ![.NET](https://img.shields.io/badge/.NET-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
-![Console](https://img.shields.io/badge/Console-4EAA25?style=for-the-badge&logo=windows-terminal&logoColor=white)
-![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
+![SQL Server](https://img.shields.io/badge/SQL%20Server-CC2927?style=for-the-badge&logo=microsoft-sql-server&logoColor=white)
 
----
-
-## 👥 INTEGRANTES DO GRUPO
+## 👥 INTEGRANTES
 
 | Nome | RM |
 |------|-----|
 | **Isadora Meneghetti** | RM556326 |
-| **Gustavo Ikeda** | RM554718 |
-| **Henrique Azevedo** | RM556707 |
-| **Renato Alvarenga** | RM556403 |
-| **Victoria Moura** | RM555474 |
 
 ---
 
 ## 📚 DISCIPLINA
 
-**Estruturas de Controle de Fluxo e Métodos em C#**
+**Acesso a Bancos de Dados com ADO.NET - CRUD em C#**
 
 **Professor:** Vinícius Costa Santos
 
@@ -31,433 +24,355 @@
 
 ---
 
-## 📋 SOBRE O REPOSITÓRIO
+## 📋 SOBRE O PROJETO
 
-Este repositório contém os projetos desenvolvidos durante a disciplina, abordando conceitos fundamentais de programação em C#:
+Este é um **Laboratório de ADO.NET (ADOLab)** desenvolvido em C#.
 
-- Estruturas de controle de fluxo (`if/else`, `switch`, `while`, `for`, `foreach`)
-- Métodos e funções
-- Programação Orientada a Objetos
-- Coleções e Listas
-- Tratamento de exceções
-- Trabalho com datas e fusos horários
-- **Garbage Collection e gerenciamento de memória**
-- **Programação Assíncrona e Paralelismo**
+O projeto implementa um **CRUD completo** (Create, Read, Update, Delete) para a entidade **Aluno**, demonstrando os principais conceitos de acesso a dados em .NET com SQL Server.
 
 ---
 
-## 📁 ESTRUTURA DO REPOSITÓRIO (BRANCHES)
-
-```
-main                    # Branch principal (documentação)
-│
-├── hands-on-01         # Jokempo v1 - Pedra, Papel e Tesoura
-├── hands-on-02         # Jokempo v2 - Com estatísticas e histórico
-├── hands-on-03         # Blackjack - Jogo de cartas 21
-├── hands-on-05         # AgendaConsole - Com fusos horários
-├── hands-on-05.2       # GCLab - Laboratório de Garbage Collection
-└── hands-on-06         # AsyncLab - Laboratório de Programação Assíncrona
-```
-
----
-
-## 📊 STATUS DAS BRANCHES
-
-| Branch | Projeto | Descrição | Status |
-|--------|---------|-----------|--------|
-| `main` | Documentação | README principal do repositório | ✅ Ativo |
-| `hands-on-01` | Jokempo v1 | Pedra, Papel e Tesoura (básico) | ✅ Concluído |
-| `hands-on-02` | Jokempo v2 | Com estatísticas e histórico de jogadores | ✅ Concluído |
-| `hands-on-03` | Blackjack 21 | Jogo de cartas Blackjack | ✅ Concluído |
-| `hands-on-05` | AgendaConsole | Sistema de agenda com fusos horários | ✅ Concluído |
-| `hands-on-05.2` | **GCLab** | Laboratório de Garbage Collection | ✅ Concluído |
-| `hands-on-06` | **AsyncLab** | Laboratório de Programação Assíncrona | ✅ Concluído |
-
----
-
-## 🎮 PROJETO 1: JOKEMPO V1 (hands-on-01)
-
-### Sobre o Projeto
-Jogo de Pedra, Papel e Tesoura onde o usuário joga contra o computador.
-
-### Regras do Jogo
-| Escolha | Ganha de | Perde para |
-|---------|----------|------------|
-| 🪨 Pedra | ✂️ Tesoura | 📄 Papel |
-| 📄 Papel | 🪨 Pedra | ✂️ Tesoura |
-| ✂️ Tesoura | 📄 Papel | 🪨 Pedra |
-
-### Como Jogar
-```bash
-git checkout hands-on-01
-cd Jokempo
-dotnet run
-```
-
-1. Digite seu nome
-2. Escolha sua jogada:
-   - **[1] Pedra** 🪨
-   - **[2] Papel** 📄
-   - **[3] Tesoura** ✂️
-3. Veja o resultado e acumule pontos
-
----
-
-## 🎮 PROJETO 2: JOKEMPO V2 (hands-on-02)
-
-### Novidades da Versão 2
-- ✅ Modularização do código com métodos
-- ✅ Validação de entrada de dados
-- ✅ Gravação do nome do jogador
-- ✅ Permite mudar de jogador
-- ✅ Estatísticas completas dos jogadores
-
-### Estatísticas Exibidas
-- Total de partidas jogadas
-- Vitórias
-- Derrotas
-- Empates
-- Taxa de aproveitamento
-
-### Como Jogar
-```bash
-git checkout hands-on-02
-cd Jokempo
-dotnet run
-```
-
----
-
-## 🃏 PROJETO 3: BLACKJACK 21 (hands-on-03)
-
-### Sobre o Projeto
-Jogo de cartas Blackjack (21) desenvolvido com Programação Orientada a Objetos.
-
-### Valores das Cartas
-| Carta | Valor |
-|-------|-------|
-| 2, 3, 4, 5, 6, 7, 8, 9, 10 | Valor nominal |
-| Valete (J), Dama (Q), Rei (K) | 10 |
-| Ás (A) | 11 ou 1 |
-
-### Regras do Jogo
-- Jogador começa com 2 cartas
-- Pode **comprar** (Hit) ou **parar** (Stand)
-- Computador compra até atingir 17 pontos
-- Quem chegar mais perto de 21 (sem estourar) vence
-
-### Como Jogar
-```bash
-git checkout hands-on-03
-cd Blackjack
-dotnet run
-```
-
-### Sistema de Pontuação
-| Resultado | Pontos |
-|-----------|--------|
-| 🏆 Vitória | +100 |
-| ❌ Derrota | 0 |
-| 🤝 Empate | 0 |
-
----
-
-## 📅 PROJETO 4: AGENDACONSOLE (hands-on-05)
-
-### Sobre o Projeto
-Sistema de agenda com suporte a múltiplos fusos horários.
-
-### Funcionalidades
-- ✅ Adicionar compromissos com data, hora e fuso horário
-- ✅ Exibir compromissos do dia atual
-- ✅ Exibir compromissos por data específica
-- ✅ Conversão automática entre fusos UTC
-
-### Fusos Horários Suportados
-| Fuso | TimeZone ID (Windows) |
-|------|----------------------|
-| UTC-5 | `SA Pacific Standard Time` |
-| UTC-4 | `SA Western Standard Time` |
-| UTC-3 | `E. South America Standard Time` |
-| UTC-5 | `Eastern Standard Time` |
-| UTC-8 | `Pacific Standard Time` |
-| UTC+0 | `GMT Standard Time` |
-| UTC+5 | `Pakistan Standard Time` |
-| UTC+9 | `Tokyo Standard Time` |
-
-### Como Executar
-```bash
-git checkout hands-on-05
-cd AgendaConsole
-dotnet run
-```
-
----
-
-## 🗑️ PROJETO 5: GCLAB (hands-on-05.2)
-
-### Sobre o Projeto
-Laboratório de Garbage Collection em C# - Identificação e Correção de Memory Leaks.
-
-### Problemas Propositais
-
-| # | Problema | Descrição |
-|---|----------|-----------|
-| **1** | **Event Leak** | Subscriber inscrito em evento sem nunca desinscrever |
-| **2** | **LOH + Cache Estático** | Buffer grande (200KB) no LOH armazenado em cache estático sem expiração |
-| **3** | **Pinned Buffer** | Buffer fixado (pinned) por longo período, impedindo movimentação do GC |
-| **4** | **String Concatenação** | 50.000 concatenações gerando resíduo no Gen0/Gen1 |
-| **5** | **Recurso externo sem Dispose** | StreamWriter sem liberação adequada, dependendo apenas do finalizador |
-
-### Correções Aplicadas
-
-| Problema | Solução |
-|----------|---------|
-| **Event Leak** | Implementar `IDisposable` e remover evento no `Dispose()` |
-| **LOH + Cache** | Usar `WeakReference` + política FIFO de remoção |
-| **Pinned Buffer** | Implementar `IDisposable` para desfixar via `GCHandle.Free()` |
-| **String Concat** | Substituir por `StringBuilder` |
-| **Recurso externo** | Implementar `IDisposable` padrão com `Dispose()` do StreamWriter |
-
-### Como Executar
-```bash
-git checkout hands-on-05.2
-cd GCLab
-dotnet run
-```
-
-### Exemplo de saída (após correção):
-```
---- Verificação de sobreviventes (WeakReference) ---
-subscriber: coletado
-lohBuffer: coletado
-pinnedBuffer: coletado
-logger: coletado
------------------------------------------------
-✅ GC limpo: nenhuma referência indesejada permaneceu viva.
-```
-
----
-
-## ⚡ PROJETO 6: ASYNCLAB (hands-on-06)
-
-### Sobre o Projeto
-Laboratório de Programação Assíncrona em C# - Gerenciamento de arquivos, processamento paralelo e sistema de pesquisa.
-
-### Funcionalidades Completas
+## 🚀 FUNCIONALIDADES
 
 | # | Funcionalidade | Descrição |
 |---|----------------|-----------|
-| **1** | **Verificação de arquivo** | Verifica se o CSV local existe antes de baixar |
-| **2** | **Backup automático** | Cria backup do arquivo antes de modificações |
-| **3** | **Modificações aleatórias** | Altera ~30% dos registros para simular dados corrompidos |
-| **4** | **Download atualizado** | Baixa nova versão do CSV da Receita Federal |
-| **5** | **Comparação de arquivos** | Compara versão local com oficial e gera relatório |
-| **6** | **Processamento PBKDF2** | Aplica 50.000 iterações de SHA-256 por município |
-| **7** | **Exportação multi-formato** | Salva por UF em CSV, JSON e formato binário |
-| **8** | **Pesquisa interativa** | Busca por UF, parte do nome ou código IBGE |
+| **1** | **CREATE (Inserir)** | Insere um novo aluno no banco de dados |
+| **2** | **READ (Listar todos)** | Lista todos os alunos usando modo conectado |
+| **3** | **READ (Por ID)** | Busca um aluno específico pelo ID |
+| **4** | **READ (Busca por nome)** | Busca alunos por parte do nome (LIKE) |
+| **5** | **READ (Total)** | Obtém o total de alunos cadastrados |
+| **6** | **UPDATE (Atualizar)** | Atualiza os dados de um aluno existente |
+| **7** | **DELETE (Deletar)** | Remove um aluno do banco de dados |
+| **8** | **READ (Desconectado)** | Lista alunos usando modo desconectado (DataTable) |
 
-### Fluxo de Execução
+---
 
-```
-1. Verificar existência do arquivo municipios.csv
-   ├── SIM → Backup → Modificações aleatórias (30% dos registros)
-   └── NÃO → Segue para download
-
-2. Baixar nova versão (municipios_receita.csv)
-
-3. Comparar arquivos
-   └── Salvar diferenças em diferencas_municipios.csv
-
-4. Processar hashes PBKDF2 (50.000 iterações)
-
-5. Salvar por UF em 3 formatos:
-   ├── CSV  (municipios_hash_UF.csv)
-   ├── JSON (municipios_hash_UF.json)
-   └── BIN  (municipios_UF.bin) + TXT para debug
-
-6. Menu interativo de pesquisa:
-   ├── Pesquisar por UF
-   ├── Pesquisar por nome (parcial)
-   └── Pesquisar por código IBGE
-```
-
-### Estrutura de Arquivos Gerados
+## 🔄 FLUXO DE EXECUÇÃO
 
 ```
-AsyncLab/
-├── backup/                              # Backups automáticos
-│   └── municipios_backup_YYYYMMDD_HHmmss.csv
+┌─────────────────────────────────────────────────────────────┐
+│                    ADOLAB - FLUXO COMPLETO                  │
+└─────────────────────────────────────────────────────────────┘
+
+1. Inicializar banco de dados
+   │
+   └── Verificar se tabela Alunos existe → Criar se necessário
+
+2. CRUD - Create (Inserir)
+   │
+   └── Inserir 3 alunos: Ana, Carlos, Mariana
+
+3. CRUD - Read (Consultar)
+   │
+   ├── Listar todos os alunos (modo conectado)
+   ├── Buscar por ID
+   ├── Buscar por nome (LIKE)
+   └── Obter total de alunos (COUNT)
+
+4. CRUD - Update (Atualizar)
+   │
+   └── Atualizar idade e email da Ana
+
+5. CRUD - Read (Verificar atualização)
+   │
+   └── Buscar Ana novamente para confirmar
+
+6. CRUD - Read (Modo desconectado)
+   │
+   └── Listar alunos usando DataTable
+
+7. CRUD - Delete (Deletar)
+   │
+   └── Remover Mariana do banco
+
+8. CRUD - Read (Total final)
+   │
+   └── Verificar que restaram 2 alunos
+```
+
+---
+
+## 📁 ESTRUTURA DO PROJETO
+
+```
+ADOLab/
+├── ADOLab.sln                      # Solução do Visual Studio
+├── .gitignore                      # Arquivos ignorados pelo Git
+├── README.md                       # Documentação do projeto
 │
-├── mun_hash_por_uf/                     # CSV e JSON por UF
-│   ├── municipios_hash_AC.csv
-│   ├── municipios_hash_AC.json
-│   └── ... (27 UFs)
+├── ADOLab.Console/                 # Camada de apresentação (Console App)
+│   ├── ADOLab.Console.csproj       # Arquivo do projeto
+│   ├── Program.cs                  # Ponto de entrada e testes
+│   └── appsettings.json            # Configurações (connection string)
 │
-├── binario_por_uf/                      # Formato binário por UF
-│   ├── municipios_AC.bin
-│   ├── municipios_AC.txt   # Debug
-│   └── ...
-│
-└── diferencas_municipios.csv            # Relatório de diferenças
+└── ADOLab.Data/                    # Camada de acesso a dados
+    ├── ADOLab.Data.csproj          # Arquivo do projeto
+    ├── Database/
+    │   └── DatabaseInitializer.cs  # Inicialização do banco
+    ├── Models/
+    │   └── Aluno.cs                # Entidade Aluno
+    └── Repositories/
+        └── AlunoRepository.cs      # CRUD completo
 ```
 
-### Resultados de Performance
+---
 
-| Métrica | Valor |
-|---------|-------|
-| **Municípios processados** | 5.571 |
-| **Total de UFs** | 27 |
-| **Iterações PBKDF2** | 50.000 por município |
-| **Formatos de saída** | 3 por UF (CSV, JSON, BIN) |
-| **Tempo total** | ~1min 00s |
-| **Ganho assíncrono** | ~42% vs versão síncrona |
+## 🔬 TECNOLOGIAS UTILIZADAS
 
-### Como Executar
+| Tecnologia | Aplicação |
+|------------|-----------|
+| **ADO.NET** | Acesso a dados com SQL Server |
+| **SqlConnection** | Gerenciamento de conexão com o banco |
+| **SqlCommand** | Execução de comandos SQL |
+| **SqlParameter** | Prevenção de SQL Injection |
+| **SqlDataReader** | Leitura forward-only (modo conectado) |
+| **SqlDataAdapter** | Preenche DataTable (modo desconectado) |
+| **Repository Pattern** | Encapsulamento da lógica de acesso a dados |
+
+---
+
+## 💻 CÓDIGOS IMPLEMENTADOS
+
+### DatabaseInitializer.cs - Inicialização do Banco
+```csharp
+// Verifica e cria a tabela Alunos se não existir
+const string createTableSql = @"
+    IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Alunos' AND xtype='U')
+    BEGIN
+        CREATE TABLE Alunos (
+            Id INT IDENTITY(1,1) PRIMARY KEY,
+            Nome NVARCHAR(100) NOT NULL,
+            Idade INT NOT NULL,
+            Email NVARCHAR(200) NULL,
+            DataMatricula DATETIME NOT NULL DEFAULT GETDATE()
+        );
+    END";
+```
+
+### AlunoRepository.cs - Operações CRUD
+```csharp
+// CREATE - Inserir aluno (retorna ID gerado)
+public int Inserir(Aluno aluno)
+{
+    const string sql = @"
+        INSERT INTO Alunos (Nome, Idade, Email, DataMatricula) 
+        VALUES (@Nome, @Idade, @Email, @DataMatricula);
+        SELECT CAST(SCOPE_IDENTITY() AS INT);";
+    
+    // Usa parâmetros para prevenir SQL Injection
+    cmd.Parameters.Add("@Nome", SqlDbType.NVarChar, 100).Value = aluno.Nome;
+    // ...
+    return (int)cmd.ExecuteScalar();
+}
+
+// READ - Listar todos (modo conectado)
+public List<Aluno> ObterTodos()
+{
+    const string sql = "SELECT * FROM Alunos ORDER BY Nome";
+    // SqlDataReader - leitura forward-only
+    while (reader.Read())
+    {
+        alunos.Add(new Aluno { ... });
+    }
+    return alunos;
+}
+
+// UPDATE - Atualizar aluno
+public bool Atualizar(Aluno aluno)
+{
+    const string sql = "UPDATE Alunos SET Nome=@Nome, Idade=@Idade, Email=@Email WHERE Id=@Id";
+    int linhasAfetadas = cmd.ExecuteNonQuery();
+    return linhasAfetadas > 0;
+}
+
+// DELETE - Remover aluno
+public bool Deletar(int id)
+{
+    const string sql = "DELETE FROM Alunos WHERE Id=@Id";
+    int linhasAfetadas = cmd.ExecuteNonQuery();
+    return linhasAfetadas > 0;
+}
+```
+
+---
+
+## 📊 MÉTRICAS DE DESEMPENHO
+
+### Operações Realizadas:
+```
+📊 3 alunos inseridos
+🔍 4 tipos de consulta realizadas (todos, ID, nome, total)
+📝 1 atualização realizada
+🗑️ 1 deleção realizada
+💾 2 modos de leitura testados (conectado e desconectado)
+```
+
+### Modos de Conexão:
+
+| Modo | Características | Uso no Projeto |
+|------|-----------------|----------------|
+| **Conectado** | Conexão aberta, forward-only, baixa memória | `ObterTodos()`, `ObterPorId()`, `BuscarPorNome()` |
+| **Desconectado** | Dados em memória, conexão fechada, editável | `ObterTodosDesconectado()` (DataTable) |
+
+---
+
+## 🎮 COMO USAR
 
 ```bash
-git checkout hands-on-06
-cd AsyncLab
-dotnet run
+# Clone o repositório
+git clone https://github.com/isadorameneghetti/hands-on-c.git
+
+# Entre na branch hands-on-08
+git checkout hands-on-08
+
+# Entre no diretório
+cd ADOLab
+
+# Restaure os pacotes
+dotnet restore
+
+# Compile o projeto
+dotnet build
+
+# Execute o programa
+dotnet run --project ADOLab.Console\ADOLab.Console.csproj
 ```
 
-### Exemplo de Saída
+### Saída esperada:
 
 ```
-=== ASYNCLAB - PROCESSAMENTO DE MUNICÍPIOS ===
+Banco de dados inicializado com sucesso.
+=== ADO.NET CRUD - AlunoRepository ===
 
-[1] Arquivo local encontrado. Fazendo backup...
-    Backup salvo em: backup/municipios_backup_20260514_143022.csv
+--- Inserindo alunos ---
+Aluno inserido com ID: 1
+Aluno inserido com ID: 2
+Aluno inserido com ID: 3
 
-[2] Aplicando modificações aleatórias no arquivo local...
-    Modificações aplicadas com sucesso!
+Total de alunos: 3
 
-[3] Baixando arquivo atualizado da Receita Federal...
-    Download concluído: municipios_receita.csv
+--- Lista de alunos (modo conectado) ---
+#1 - Ana Silva (22 anos) - ana@email.com
+#2 - Carlos Santos (25 anos) - carlos@email.com
+#3 - Mariana Oliveira (19 anos) - mariana@email.com
 
-[4] Comparando arquivo local com o da Receita...
-    Diferenças encontradas: 1672
-    Arquivo de diferenças salvo em: diferencas_municipios.csv
+--- Buscando alunos com 'ana' ---
+#1 - Ana Silva (22 anos)
+#3 - Mariana Oliveira (19 anos)
 
-[5] Processando dados e gerando hashes...
-    Registros lidos: 5571
+--- Obter aluno por ID ---
+ID 1: Ana Silva - ana@email.com
 
-[6] Salvando arquivos por UF em formato binário...
-    UF AC: 22 municípios salvos (CSV, JSON e BIN)
-    UF AL: 102 municípios salvos (CSV, JSON e BIN)
-    ...
+--- Atualizando aluno ---
+Atualização bem-sucedida: True
+Após atualização: Ana Silva - 23 anos - ana.silva@email.com
 
-[7] Sistema de pesquisa de municípios
-========================================
+--- Modo desconectado (DataTable) ---
+#1 - Ana Silva (23 anos)
+#2 - Carlos Santos (25 anos)
+#3 - Mariana Oliveira (19 anos)
 
-Opções de pesquisa:
-  1 - Pesquisar por UF
-  2 - Pesquisar por nome (parte do nome)
-  3 - Pesquisar por código IBGE
-  0 - Sair
+--- Deletando aluno ---
+Deleção bem-sucedida: True
 
-Escolha uma opção: 1
-Digite a UF (ex: SP, RJ, MG): SP
+Total final de alunos: 2
 
-============================================================
-📋 Municípios da UF SP
-============================================================
-Total encontrado: 645
-
-  3500105 | SP | Adamantina
-  3500204 | SP | Adolfo
-  ...
-
-===== RESUMO FINAL =====
-UFs processadas: 27
-Total de municípios: 5571
-✅ Laboratório concluído com sucesso!
+Pressione qualquer tecla para sair...
 ```
+
+### Exemplo de Pesquisa:
+
+```
+--- Buscando alunos com 'ana' ---
+🔎 Busca por 'ana' encontrou 2 aluno(s):
+   #1 - Ana Silva (22 anos)
+   #3 - Mariana Oliveira (19 anos)
+```
+
+---
+
+## ✅ VALIDAÇÃO DOS REQUISITOS
+
+| # | Requisito | Status | Implementação |
+|---|-----------|--------|----------------|
+| 1 | Inserir aluno com retorno do ID | ✅ | `ExecuteScalar` + `SCOPE_IDENTITY()` |
+| 2 | Listar todos os alunos | ✅ | `SqlDataReader` (modo conectado) |
+| 3 | Buscar aluno por ID | ✅ | `SqlDataReader` com parâmetro |
+| 4 | Buscar alunos por nome (LIKE) | ✅ | `LIKE @Termo` com parâmetro |
+| 5 | Obter total de alunos | ✅ | `ExecuteScalar` com `COUNT(*)` |
+| 6 | Atualizar dados do aluno | ✅ | `ExecuteNonQuery` com parâmetros |
+| 7 | Deletar aluno por ID | ✅ | `ExecuteNonQuery` com parâmetro |
+| 8 | Modo desconectado (DataTable) | ✅ | `SqlDataAdapter` + `DataTable` |
+| 9 | Prevenção de SQL Injection | ✅ | `SqlParameter` em todos os comandos |
+| 10 | Boas práticas com `using` | ✅ | Garantia de fechamento da conexão |
+| 11 | Centralização da connection string | ✅ | `appsettings.json` |
+
+---
+
+## 📝 DIVISÃO DE TAREFAS
+
+| Integrante | Tarefas |
+|------------|---------|
+| **Isadora Meneghetti** | - Análise dos requisitos<br>- Implementação do CRUD completo<br>- Criação do repositório<br>- Documentação do README |
 
 ---
 
 ## 🧠 CONCEITOS APLICADOS
 
-| Conceito | Jokempo V1 | Jokempo V2 | Blackjack | Agenda | GCLab | AsyncLab |
-|----------|:----------:|:----------:|:---------:|:------:|:-----:|:--------:|
-| **Classes e Objetos** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Métodos** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **If/Else** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Switch/Case** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **While/For** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Listas/Tipos Genéricos** | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Enumerações** | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ |
-| **Encapsulamento** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Tratamento de Exceções** | ❌ | ✅ | ❌ | ✅ | ✅ | ✅ |
-| **LINQ** | ❌ | ❌ | ❌ | ✅ | ❌ | ✅ |
-| **TimeZoneInfo** | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| **Garbage Collection** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
-| **WeakReference** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
-| **IDisposable Pattern** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
-| **async/await** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **Task.WhenAll** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **Paralelismo** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **Serialização Binária** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **Comparação de Arquivos** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **Backup e Versionamento** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Conceito | Aplicação no Projeto |
+|----------|----------------------|
+| **SqlConnection** | Gerenciamento de conexão com SQL Server |
+| **SqlCommand** | Execução de comandos SQL |
+| **SqlParameter** | Prevenção de SQL Injection |
+| **ExecuteNonQuery** | INSERT, UPDATE, DELETE |
+| **ExecuteScalar** | COUNT(*) e SCOPE_IDENTITY() |
+| **ExecuteReader** | SELECT com SqlDataReader |
+| **SqlDataReader** | Modo Conectado - leitura forward-only |
+| **SqlDataAdapter + DataTable** | Modo Desconectado - dados em memória |
+| **Repository Pattern** | Encapsulamento da lógica de acesso a dados |
+| **using** | Garantia de liberação de recursos |
+| **appsettings.json** | Centralização da connection string |
 
 ---
 
-## 🚀 COMO CLONAR E ACESSAR CADA PROJETO
+## 📦 REQUISITOS
 
-```bash
-# Clonar o repositório
-git clone https://github.com/isadorameneghetti/hands-on-c.git
-
-# Acessar cada branch
-git checkout hands-on-01  # Jokempo v1
-git checkout hands-on-02  # Jokempo v2
-git checkout hands-on-03  # Blackjack
-git checkout hands-on-05  # AgendaConsole
-git checkout hands-on-05.2 # GCLab
-git checkout hands-on-06  # AsyncLab
-```
-
----
-
-## ▶️ REQUISITOS PARA EXECUTAR
-
-- .NET SDK 6.0 ou superior
+- .NET SDK 8.0 ou superior
+- SQL Server LocalDB ou SQL Server Express
 - Windows / Linux / macOS
-- Git (para clonar o repositório)
-- Conexão com internet (AsyncLab apenas)
 
 ---
 
-## 📈 APRENDIZADOS
+## 🎯 RESULTADOS OBTIDOS
 
-Durante o desenvolvimento dos projetos, foram trabalhados:
+### Funcionalidades Implementadas:
+- ✅ CRUD completo (Create, Read, Update, Delete)
+- ✅ Modo conectado com SqlDataReader
+- ✅ Modo desconectado com DataTable
+- ✅ Prevenção de SQL Injection com parâmetros
+- ✅ Boas práticas com `using` e centralização de configuração
+- ✅ Repository Pattern para organização do código
 
-1. **Organização de código** - Divisão em métodos e classes
-2. **Validações** - Tratamento de entradas do usuário
-3. **POO** - Encapsulamento, construtores, propriedades
-4. **Coleções** - Uso de List, Dictionary, Queue, Stack
-5. **Fusos horários** - Conversão com TimeZoneInfo
-6. **Gerenciamento de Memória** - Garbage Collection, WeakReference, IDisposable
-7. **Programação Assíncrona** - async/await, Task.WhenAll, paralelismo
-8. **Serialização** - Formatos CSV, JSON e Binário
-9. **Versionamento** - Backup e comparação de versões de arquivos
-10. **Sistemas de Busca** - Pesquisa com múltiplos critérios
+### Qualidade do Código:
+- ✅ Separação de responsabilidades (Models, Repositories, Database)
+- ✅ Uso consistente de parâmetros em todos os comandos
+- ✅ Tratamento adequado de valores nulos (DBNull.Value)
+- ✅ Código comentado para facilitar compreensão
 
 ---
 
-## 🔗 LINKS ÚTEIS
+## 💡 APRENDIZADOS
 
-- [Documentação C#](https://learn.microsoft.com/pt-br/dotnet/csharp/)
-- [.NET Download](https://dotnet.microsoft.com/download)
-- [Git Download](https://git-scm.com/downloads)
-- [Garbage Collection no .NET](https://learn.microsoft.com/pt-br/dotnet/standard/garbage-collection/)
-- [Programação Assíncrona](https://learn.microsoft.com/pt-br/dotnet/csharp/asynchronous-programming/)
+1. **ADO.NET** - Biblioteca fundamental para acesso a dados em .NET
+2. **SQL Injection** - Como prevenir com `SqlParameter`
+3. **Modos de conexão** - Diferenças entre conectado e desconectado
+4. **Repository Pattern** - Organização e manutenibilidade do código
+5. **Boas práticas** - `using`, centralização de config, tratamento de null
+6. **Execute vs Read** - Quando usar cada método do SqlCommand
+7. **DataTable vs SqlDataReader** - Vantagens de cada abordagem
 
 ---
 
 <p align="center">
-  <b>FIAP - Faculdade de Informática e Administração Paulista</b><br>
-  Desenvolvido com ❤️ por Isadora Meneghetti, Gustavo Ikeda, Henrique Azevedo, Renato Alvarenga e Victoria Moura<br>
-  © 2026 - Todos os direitos reservados
+  Desenvolvido com ❤️ por Isadora Meneghetti - FIAP
 </p>
