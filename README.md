@@ -1,9 +1,10 @@
-# 🎮 PROJETOS C# - JOKEMPO & BLACKJACK & AGENDA & GCLAB & ASYNCLAB
+# 🎮 PROJETOS C# - JOKEMPO & BLACKJACK & AGENDA & GCLAB & ASYNCLAB & ADOLAB
 
 ![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white)
 ![.NET](https://img.shields.io/badge/.NET-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
 ![Console](https://img.shields.io/badge/Console-4EAA25?style=for-the-badge&logo=windows-terminal&logoColor=white)
 ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
+![SQL Server](https://img.shields.io/badge/SQL%20Server-CC2927?style=for-the-badge&logo=microsoft-sql-server&logoColor=white)
 
 ---
 
@@ -21,7 +22,11 @@
 
 ## 📚 DISCIPLINA
 
+### Primeiro Semestre
 **Estruturas de Controle de Fluxo e Métodos em C#**
+
+### Segundo Semestre
+**Acesso a Bancos de Dados com ADO.NET**
 
 **Professor:** Vinícius Costa Santos
 
@@ -35,6 +40,7 @@
 
 Este repositório contém os projetos desenvolvidos durante a disciplina, abordando conceitos fundamentais de programação em C#:
 
+### Primeiro Semestre
 - Estruturas de controle de fluxo (`if/else`, `switch`, `while`, `for`, `foreach`)
 - Métodos e funções
 - Programação Orientada a Objetos
@@ -44,6 +50,14 @@ Este repositório contém os projetos desenvolvidos durante a disciplina, aborda
 - **Garbage Collection e gerenciamento de memória**
 - **Programação Assíncrona e Paralelismo**
 
+### Segundo Semestre
+- **ADO.NET** - Acesso a bancos de dados relacionais
+- **CRUD completo** (Create, Read, Update, Delete)
+- **SQL Server** - Conexão e execução de comandos
+- **Prevenção de SQL Injection** com `SqlParameter`
+- **Modo Conectado vs Desconectado**
+- **Repository Pattern**
+
 ---
 
 ## 📁 ESTRUTURA DO REPOSITÓRIO (BRANCHES)
@@ -51,27 +65,32 @@ Este repositório contém os projetos desenvolvidos durante a disciplina, aborda
 ```
 main                    # Branch principal (documentação)
 │
-├── hands-on-01         # Jokempo v1 - Pedra, Papel e Tesoura
-├── hands-on-02         # Jokempo v2 - Com estatísticas e histórico
-├── hands-on-03         # Blackjack - Jogo de cartas 21
-├── hands-on-05         # AgendaConsole - Com fusos horários
-├── hands-on-05.2       # GCLab - Laboratório de Garbage Collection
-└── hands-on-06         # AsyncLab - Laboratório de Programação Assíncrona
+├── [PRIMEIRO SEMESTRE]
+│   ├── hands-on-01         # Jokempo v1 - Pedra, Papel e Tesoura
+│   ├── hands-on-02         # Jokempo v2 - Com estatísticas e histórico
+│   ├── hands-on-03         # Blackjack - Jogo de cartas 21
+│   ├── hands-on-05         # AgendaConsole - Com fusos horários
+│   ├── hands-on-05.2       # GCLab - Laboratório de Garbage Collection
+│   └── hands-on-06         # AsyncLab - Laboratório de Programação Assíncrona
+│
+└── [SEGUNDO SEMESTRE]
+    └── hands-on-08         # ADOLab - CRUD com ADO.NET
 ```
 
 ---
 
 ## 📊 STATUS DAS BRANCHES
 
-| Branch | Projeto | Descrição | Status |
-|--------|---------|-----------|--------|
-| `main` | Documentação | README principal do repositório | ✅ Ativo |
-| `hands-on-01` | Jokempo v1 | Pedra, Papel e Tesoura (básico) | ✅ Concluído |
-| `hands-on-02` | Jokempo v2 | Com estatísticas e histórico de jogadores | ✅ Concluído |
-| `hands-on-03` | Blackjack 21 | Jogo de cartas Blackjack | ✅ Concluído |
-| `hands-on-05` | AgendaConsole | Sistema de agenda com fusos horários | ✅ Concluído |
-| `hands-on-05.2` | **GCLab** | Laboratório de Garbage Collection | ✅ Concluído |
-| `hands-on-06` | **AsyncLab** | Laboratório de Programação Assíncrona | ✅ Concluído |
+| Branch | Projeto | Descrição | Semestre | Status |
+|--------|---------|-----------|----------|--------|
+| `main` | Documentação | README principal do repositório | - | ✅ Ativo |
+| `hands-on-01` | Jokempo v1 | Pedra, Papel e Tesoura (básico) | 1º | ✅ Concluído |
+| `hands-on-02` | Jokempo v2 | Com estatísticas e histórico de jogadores | 1º | ✅ Concluído |
+| `hands-on-03` | Blackjack 21 | Jogo de cartas Blackjack | 1º | ✅ Concluído |
+| `hands-on-05` | AgendaConsole | Sistema de agenda com fusos horários | 1º | ✅ Concluído |
+| `hands-on-05.2` | **GCLab** | Laboratório de Garbage Collection | 1º | ✅ Concluído |
+| `hands-on-06` | **AsyncLab** | Laboratório de Programação Assíncrona | 1º | ✅ Concluído |
+| `hands-on-08` | **ADOLab** | CRUD com ADO.NET e SQL Server | 2º | ✅ Concluído |
 
 ---
 
@@ -376,30 +395,135 @@ Total de municípios: 5571
 
 ---
 
+## 🗄️ PROJETO 7: ADOLAB (hands-on-08) - SEGUNDO SEMESTRE
+
+### Sobre o Projeto
+Laboratório de ADO.NET - Implementação de um CRUD completo com SQL Server.
+
+### Funcionalidades
+
+| # | Funcionalidade | Descrição |
+|---|----------------|-----------|
+| **1** | **CREATE (Inserir)** | Insere um novo aluno no banco de dados |
+| **2** | **READ (Listar todos)** | Lista todos os alunos usando modo conectado |
+| **3** | **READ (Por ID)** | Busca um aluno específico pelo ID |
+| **4** | **READ (Busca por nome)** | Busca alunos por parte do nome (LIKE) |
+| **5** | **READ (Total)** | Obtém o total de alunos cadastrados |
+| **6** | **UPDATE (Atualizar)** | Atualiza os dados de um aluno existente |
+| **7** | **DELETE (Deletar)** | Remove um aluno do banco de dados |
+| **8** | **READ (Desconectado)** | Lista alunos usando modo desconectado (DataTable) |
+
+### Tecnologias Utilizadas
+- ADO.NET
+- SQL Server LocalDB
+- Repository Pattern
+- Microsoft.Data.SqlClient
+
+### Estrutura do Projeto
+
+```
+ADOLab/
+├── ADOLab.sln
+├── ADOLab.Console/
+│   ├── Program.cs
+│   └── appsettings.json
+└── ADOLab.Data/
+    ├── Database/
+    │   └── DatabaseInitializer.cs
+    ├── Models/
+    │   └── Aluno.cs
+    └── Repositories/
+        └── AlunoRepository.cs
+```
+
+### Como Executar
+
+```bash
+git checkout hands-on-08
+cd ADOLab
+dotnet restore
+dotnet run --project ADOLab.Console\ADOLab.Console.csproj
+```
+
+### Exemplo de Saída
+
+```
+Banco de dados inicializado com sucesso.
+=== ADO.NET CRUD - AlunoRepository ===
+
+--- Inserindo alunos ---
+Aluno inserido com ID: 1
+Aluno inserido com ID: 2
+Aluno inserido com ID: 3
+
+Total de alunos: 3
+
+--- Lista de alunos (modo conectado) ---
+#1 - Ana Silva (22 anos) - ana@email.com
+#2 - Carlos Santos (25 anos) - carlos@email.com
+#3 - Mariana Oliveira (19 anos) - mariana@email.com
+
+--- Buscando alunos com 'ana' ---
+#1 - Ana Silva (22 anos)
+#3 - Mariana Oliveira (19 anos)
+
+--- Atualizando aluno ---
+Atualização bem-sucedida: True
+Após atualização: Ana Silva - 23 anos - ana.silva@email.com
+
+--- Modo desconectado (DataTable) ---
+#1 - Ana Silva (23 anos)
+#2 - Carlos Santos (25 anos)
+#3 - Mariana Oliveira (19 anos)
+
+--- Deletando aluno ---
+Deleção bem-sucedida: True
+
+Total final de alunos: 2
+```
+
+### Conceitos Aplicados no ADOLab
+- **SqlConnection** - Gerenciamento de conexão com SQL Server
+- **SqlCommand** - Execução de comandos SQL
+- **SqlParameter** - Prevenção de SQL Injection
+- **ExecuteNonQuery** - INSERT, UPDATE, DELETE
+- **ExecuteScalar** - COUNT(*) e SCOPE_IDENTITY()
+- **ExecuteReader** - SELECT com SqlDataReader
+- **SqlDataReader** - Modo Conectado
+- **SqlDataAdapter + DataTable** - Modo Desconectado
+- **Repository Pattern** - Encapsulamento da lógica de acesso a dados
+- **using** - Garantia de liberação de recursos
+
+---
+
 ## 🧠 CONCEITOS APLICADOS
 
-| Conceito | Jokempo V1 | Jokempo V2 | Blackjack | Agenda | GCLab | AsyncLab |
-|----------|:----------:|:----------:|:---------:|:------:|:-----:|:--------:|
-| **Classes e Objetos** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Métodos** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **If/Else** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Switch/Case** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **While/For** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Listas/Tipos Genéricos** | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Enumerações** | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ |
-| **Encapsulamento** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Tratamento de Exceções** | ❌ | ✅ | ❌ | ✅ | ✅ | ✅ |
-| **LINQ** | ❌ | ❌ | ❌ | ✅ | ❌ | ✅ |
-| **TimeZoneInfo** | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| **Garbage Collection** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
-| **WeakReference** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
-| **IDisposable Pattern** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
-| **async/await** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **Task.WhenAll** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **Paralelismo** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **Serialização Binária** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **Comparação de Arquivos** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **Backup e Versionamento** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Conceito | Jokempo V1 | Jokempo V2 | Blackjack | Agenda | GCLab | AsyncLab | ADOLab |
+|----------|:----------:|:----------:|:---------:|:------:|:-----:|:--------:|:------:|
+| **Classes e Objetos** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Métodos** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **If/Else** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Switch/Case** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **While/For** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Listas/Tipos Genéricos** | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Enumerações** | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **Encapsulamento** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Tratamento de Exceções** | ❌ | ✅ | ❌ | ✅ | ✅ | ✅ | ❌ |
+| **LINQ** | ❌ | ❌ | ❌ | ✅ | ❌ | ✅ | ❌ |
+| **TimeZoneInfo** | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
+| **Garbage Collection** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
+| **WeakReference** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
+| **IDisposable Pattern** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
+| **async/await** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
+| **Task.WhenAll** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
+| **Paralelismo** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
+| **Serialização Binária** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
+| **Comparação de Arquivos** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
+| **Backup e Versionamento** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
+| **SqlConnection/SqlCommand** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **SqlParameter** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **Repository Pattern** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **Modo Conectado/Desconectado** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 
 ---
 
@@ -409,30 +533,33 @@ Total de municípios: 5571
 # Clonar o repositório
 git clone https://github.com/isadorameneghetti/hands-on-c.git
 
-# Acessar cada branch
+# PRIMEIRO SEMESTRE
 git checkout hands-on-01  # Jokempo v1
 git checkout hands-on-02  # Jokempo v2
 git checkout hands-on-03  # Blackjack
 git checkout hands-on-05  # AgendaConsole
 git checkout hands-on-05.2 # GCLab
 git checkout hands-on-06  # AsyncLab
+
+# SEGUNDO SEMESTRE
+git checkout hands-on-08  # ADOLab - CRUD com ADO.NET
 ```
 
 ---
 
 ## ▶️ REQUISITOS PARA EXECUTAR
 
-- .NET SDK 6.0 ou superior
+- .NET SDK 8.0 ou superior
 - Windows / Linux / macOS
 - Git (para clonar o repositório)
 - Conexão com internet (AsyncLab apenas)
+- SQL Server LocalDB ou SQL Server Express (ADOLab apenas)
 
 ---
 
 ## 📈 APRENDIZADOS
 
-Durante o desenvolvimento dos projetos, foram trabalhados:
-
+### Primeiro Semestre
 1. **Organização de código** - Divisão em métodos e classes
 2. **Validações** - Tratamento de entradas do usuário
 3. **POO** - Encapsulamento, construtores, propriedades
@@ -444,6 +571,15 @@ Durante o desenvolvimento dos projetos, foram trabalhados:
 9. **Versionamento** - Backup e comparação de versões de arquivos
 10. **Sistemas de Busca** - Pesquisa com múltiplos critérios
 
+### Segundo Semestre
+11. **ADO.NET** - Biblioteca fundamental para acesso a dados em .NET
+12. **SQL Injection** - Como prevenir com `SqlParameter`
+13. **Modos de conexão** - Diferenças entre conectado e desconectado
+14. **Repository Pattern** - Organização e manutenibilidade do código
+15. **Boas práticas** - `using`, centralização de config, tratamento de null
+16. **Execute vs Read** - Quando usar cada método do SqlCommand
+17. **DataTable vs SqlDataReader** - Vantagens de cada abordagem
+
 ---
 
 ## 🔗 LINKS ÚTEIS
@@ -453,6 +589,7 @@ Durante o desenvolvimento dos projetos, foram trabalhados:
 - [Git Download](https://git-scm.com/downloads)
 - [Garbage Collection no .NET](https://learn.microsoft.com/pt-br/dotnet/standard/garbage-collection/)
 - [Programação Assíncrona](https://learn.microsoft.com/pt-br/dotnet/csharp/asynchronous-programming/)
+- [ADO.NET Documentation](https://learn.microsoft.com/pt-br/dotnet/framework/data/adonet/)
 
 ---
 
