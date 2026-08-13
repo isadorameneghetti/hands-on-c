@@ -1,10 +1,12 @@
-# 🎮 PROJETOS C# - JOKEMPO & BLACKJACK & AGENDA & GCLAB & ASYNCLAB & ADOLAB
+# 🎮 PROJETOS C# - JOKEMPO & BLACKJACK & AGENDA & GCLAB & ASYNCLAB & ADOLAB & DOMINOPONTADEQUINA
 
 ![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white)
 ![.NET](https://img.shields.io/badge/.NET-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
 ![Console](https://img.shields.io/badge/Console-4EAA25?style=for-the-badge&logo=windows-terminal&logoColor=white)
 ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
 ![SQL Server](https://img.shields.io/badge/SQL%20Server-CC2927?style=for-the-badge&logo=microsoft-sql-server&logoColor=white)
+![Entity Framework](https://img.shields.io/badge/Entity%20Framework-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
+![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
 
 ---
 
@@ -26,7 +28,8 @@
 **Estruturas de Controle de Fluxo e Métodos em C#**
 
 ### Segundo Semestre
-**Acesso a Bancos de Dados com ADO.NET**
+**Acesso a Bancos de Dados com ADO.NET**  
+**Entity Framework Core - ORM para .NET**
 
 **Professor:** Vinícius Costa Santos
 
@@ -57,6 +60,10 @@ Este repositório contém os projetos desenvolvidos durante a disciplina, aborda
 - **Prevenção de SQL Injection** com `SqlParameter`
 - **Modo Conectado vs Desconectado**
 - **Repository Pattern**
+- **Entity Framework Core** - ORM para acesso a dados
+- **Fluent API** - Configuração programática de entidades
+- **Data Annotations** - Configuração declarativa com atributos
+- **Migrations** - Versionamento do esquema do banco
 
 ---
 
@@ -74,7 +81,8 @@ main                    # Branch principal (documentação)
 │   └── hands-on-06         # AsyncLab - Laboratório de Programação Assíncrona
 │
 └── [SEGUNDO SEMESTRE]
-    └── hands-on-08         # ADOLab - CRUD com ADO.NET
+    ├── hands-on-08         # ADOLab - CRUD com ADO.NET
+    └── hands-on-09         # DominoPontaDeQuina - EF Core
 ```
 
 ---
@@ -91,6 +99,7 @@ main                    # Branch principal (documentação)
 | `hands-on-05.2` | **GCLab** | Laboratório de Garbage Collection | 1º | ✅ Concluído |
 | `hands-on-06` | **AsyncLab** | Laboratório de Programação Assíncrona | 1º | ✅ Concluído |
 | `hands-on-08` | **ADOLab** | CRUD com ADO.NET e SQL Server | 2º | ✅ Concluído |
+| `hands-on-09` | **DominoPontaDeQuina** | Modelo de dados com EF Core | 2º | ✅ Concluído |
 
 ---
 
@@ -496,34 +505,220 @@ Total final de alunos: 2
 
 ---
 
+## 🗄️ PROJETO 8: DOMINOPONTADEQUINA (hands-on-09) - SEGUNDO SEMESTRE
+
+### Sobre o Projeto
+Sistema de gerenciamento do jogo de dominó **"Ponta de Quina"** utilizando **Entity Framework Core** como ORM.
+
+### 🎯 Objetivo do Laboratório
+
+Evoluir o modelo de dados do jogo de dominó utilizando EF Core, aplicando diferentes abordagens de configuração:
+
+| Entidade | Configuração | Descrição |
+|----------|--------------|-----------|
+| **Usuario** | Fluent API | Configurado via `OnModelCreating()` no DbContext |
+| **Jogador** | Data Annotations | Configurado com atributos nas propriedades |
+| **Jogo** | Convenções | Apenas propriedades, sem anotações ou Fluent API |
+
+### 🗄️ Estrutura do Banco de Dados
+
+```
+┌─────────────┐          ┌─────────────┐          ┌─────────────┐
+│   Usuario   │ 1      N │   Jogador   │ 1      N │  Jogo       │
+├─────────────┤──────────├─────────────┤──────────├─────────────┤
+│ Id (PK)     │          │ Id (PK)     │          │ Id (PK)     │
+│ Nome        │          │ NomeExibicao│          │ IniciadoEm  │
+│ Email       │          │ UsuarioId   │          │ FinalizadoEm│
+│ HashSenha   │          │ Usuario (FK)│          │ Status      │
+│ CriadoEm    │          └─────────────┘          └─────────────┘
+└─────────────┘                    ↑                        ↑
+                                   │ N                      │ 1
+                                   │                        │
+                                   └────────────────────────┘
+                                   │ N           1          │
+                                   ▼                        ▼
+                          ┌─────────────────────────────────────┐
+                          │      ParticipacaoJogo               │
+                          ├─────────────────────────────────────┤
+                          │ Id (PK)                             │
+                          │ JogoId (FK)                         │
+                          │ JogadorId (FK)                      │
+                          │ Posicao                             │
+                          │ Pontuacao                           │
+                          │ Vencedor                            │
+                          └─────────────────────────────────────┘
+```
+
+### ⚙️ Tecnologias Utilizadas
+
+| Tecnologia | Versão | Descrição |
+|------------|--------|-----------|
+| **.NET** | 8.0 | Plataforma de desenvolvimento |
+| **C#** | 12.0 | Linguagem de programação |
+| **Entity Framework Core** | 8.0.15 | ORM para acesso a dados |
+| **SQLite** | 8.0.15 | Banco de dados leve embarcado |
+| **Microsoft.EntityFrameworkCore.Design** | 8.0.15 | Ferramentas de design para migrações |
+| **Microsoft.EntityFrameworkCore.Tools** | 8.0.15 | Ferramentas CLI para migrações |
+
+### 📁 Estrutura do Projeto
+
+```
+DominoPontaDeQuina-main/
+│
+├── DominoPontaDeQuina.Domain/              # Camada de Domínio
+│   ├── Entities/
+│   │   ├── Usuario.cs                      # ✅ Fluent API
+│   │   ├── Jogador.cs                      # ✅ Data Annotations
+│   │   ├── Jogo.cs                         # ✅ Convenções
+│   │   ├── ParticipacaoJogo.cs             # ✅ Data Annotations
+│   │   └── StatusJogo.cs                   # Enum
+│   └── DominoPontaDeQuina.Domain.csproj
+│
+├── DominoPontaDeQuina.Repository/          # Camada de Repositório
+│   ├── Context/
+│   │   └── DominoDbContext.cs              # ✅ Fluent API + DbSets
+│   ├── Repositories/
+│   │   └── UsuarioRepository.cs
+│   └── DominoPontaDeQuina.Repository.csproj
+│
+├── DominoPontaDeQuina.Migrations/          # Projeto de Migrações
+│   ├── DominoDbContextFactory.cs
+│   ├── Program.cs
+│   ├── SeedData.cs
+│   ├── domino.db                           # Banco de dados SQLite
+│   ├── Migrations/                         # Pasta gerada pelo EF Core
+│   │   └── 20260813123517_InitialCreate.cs
+│   └── DominoPontaDeQuina.Migrations.csproj
+│
+└── DominoPontaDeQuina.Tests/               # Testes Unitários
+    ├── JogoTests.cs
+    ├── MaoJogadorGapTests.cs
+    ├── PartidaFluxoTests.cs
+    ├── PartidaGapTests.cs
+    ├── RodadaExcecaoTests.cs
+    ├── RodadaFinalizacaoGapTests.cs
+    ├── RodadaGapTests.cs
+    ├── TabuleiroGapTests.cs
+    └── DominoPontaDeQuina.Tests.csproj
+```
+
+### 🔧 Comandos de Migração
+
+```bash
+# Instalar a ferramenta globalmente
+dotnet tool install --global dotnet-ef
+
+# Criar a migração inicial
+cd DominoPontaDeQuina.Migrations
+dotnet ef migrations add InitialCreate --context DominoDbContext --startup-project .
+
+# Aplicar a migração ao banco
+dotnet ef database update --context DominoDbContext --startup-project .
+
+# Remover a última migração (não aplicada)
+dotnet ef migrations remove --context DominoDbContext --startup-project .
+
+# Gerar script SQL da migração
+dotnet ef migrations script --context DominoDbContext --startup-project .
+```
+
+### 🚀 Como Executar
+
+```bash
+# 1. Clonar o repositório
+git checkout hands-on-09
+
+# 2. Restaurar pacotes
+dotnet restore
+
+# 3. Entrar na pasta de migrações
+cd DominoPontaDeQuina.Migrations
+
+# 4. Criar a migration
+dotnet ef migrations add InitialCreate --context DominoDbContext --startup-project .
+
+# 5. Aplicar a migration
+dotnet ef database update --context DominoDbContext --startup-project .
+
+# 6. Executar o programa
+dotnet run
+```
+
+### 📊 Saída Esperada
+
+```
+=== DOMINO PONTA DE QUINA - HANDS ON AULA 14 ===
+
+--- Verificando Banco de Dados ---
+✓ Banco existe: True
+✓ Migrações aplicadas: 20260813123517_InitialCreate
+
+--- Executando Seed ---
+Inserindo dados iniciais...
+✓ 3 usuários criados
+✓ 4 jogadores criados
+✓ Jogo criado com 4 participantes
+✅ Seed concluído com sucesso!
+
+--- Dados no Banco ---
+
+📋 Usuários (3):
+  - João Silva (joao@email.com)
+    * Jogador: Joãozinho (ID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)
+    * Jogador: Joãozinho2 (ID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)
+  - Maria Oliveira (maria@email.com)
+    * Jogador: Mariazinha (ID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)
+  - Pedro Santos (pedro@email.com)
+    * Jogador: Pedrinho (ID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)
+
+📋 Jogos (1):
+  - Jogo ID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx | Status: EmAndamento | Iniciado: 13/08/2026 09:35
+
+✅ Verificação concluída com sucesso!
+
+📋 RESUMO DO HANDS ON:
+   ✅ Usuario configurado com Fluent API
+   ✅ Jogador configurado com Data Annotations
+   ✅ Jogo configurado por convenções
+   ✅ DominoDbContext com DbSets necessários
+   ✅ Conexão SQLite configurada
+   ✅ Migration aplicada ao banco
+```
+
+---
+
 ## 🧠 CONCEITOS APLICADOS
 
-| Conceito | Jokempo V1 | Jokempo V2 | Blackjack | Agenda | GCLab | AsyncLab | ADOLab |
-|----------|:----------:|:----------:|:---------:|:------:|:-----:|:--------:|:------:|
-| **Classes e Objetos** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Métodos** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **If/Else** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Switch/Case** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **While/For** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Listas/Tipos Genéricos** | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Enumerações** | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
-| **Encapsulamento** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Tratamento de Exceções** | ❌ | ✅ | ❌ | ✅ | ✅ | ✅ | ❌ |
-| **LINQ** | ❌ | ❌ | ❌ | ✅ | ❌ | ✅ | ❌ |
-| **TimeZoneInfo** | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
-| **Garbage Collection** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| **WeakReference** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| **IDisposable Pattern** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| **async/await** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
-| **Task.WhenAll** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
-| **Paralelismo** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
-| **Serialização Binária** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
-| **Comparação de Arquivos** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
-| **Backup e Versionamento** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
-| **SqlConnection/SqlCommand** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **SqlParameter** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **Repository Pattern** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **Modo Conectado/Desconectado** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Conceito | Jokempo V1 | Jokempo V2 | Blackjack | Agenda | GCLab | AsyncLab | ADOLab | Domino |
+|----------|:----------:|:----------:|:---------:|:------:|:-----:|:--------:|:------:|:------:|
+| **Classes e Objetos** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Métodos** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **If/Else** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Switch/Case** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **While/For** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Listas/Tipos Genéricos** | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Enumerações** | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **Encapsulamento** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Tratamento de Exceções** | ❌ | ✅ | ❌ | ✅ | ✅ | ✅ | ❌ | ✅ |
+| **LINQ** | ❌ | ❌ | ❌ | ✅ | ❌ | ✅ | ❌ | ✅ |
+| **TimeZoneInfo** | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **Garbage Collection** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
+| **WeakReference** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
+| **IDisposable Pattern** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
+| **async/await** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
+| **Task.WhenAll** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
+| **Paralelismo** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
+| **Serialização Binária** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
+| **Comparação de Arquivos** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
+| **Backup e Versionamento** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
+| **SqlConnection/SqlCommand** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
+| **SqlParameter** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
+| **Repository Pattern** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
+| **Modo Conectado/Desconectado** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
+| **Entity Framework Core** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **Fluent API** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **Data Annotations** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **Migrations** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 
 ---
 
@@ -543,6 +738,7 @@ git checkout hands-on-06  # AsyncLab
 
 # SEGUNDO SEMESTRE
 git checkout hands-on-08  # ADOLab - CRUD com ADO.NET
+git checkout hands-on-09  # DominoPontaDeQuina - EF Core
 ```
 
 ---
@@ -579,6 +775,9 @@ git checkout hands-on-08  # ADOLab - CRUD com ADO.NET
 15. **Boas práticas** - `using`, centralização de config, tratamento de null
 16. **Execute vs Read** - Quando usar cada método do SqlCommand
 17. **DataTable vs SqlDataReader** - Vantagens de cada abordagem
+18. **Entity Framework Core** - ORM moderno para .NET
+19. **Fluent API vs Data Annotations** - Diferentes abordagens de configuração
+20. **Migrations** - Versionamento do esquema do banco de dados
 
 ---
 
@@ -590,11 +789,13 @@ git checkout hands-on-08  # ADOLab - CRUD com ADO.NET
 - [Garbage Collection no .NET](https://learn.microsoft.com/pt-br/dotnet/standard/garbage-collection/)
 - [Programação Assíncrona](https://learn.microsoft.com/pt-br/dotnet/csharp/asynchronous-programming/)
 - [ADO.NET Documentation](https://learn.microsoft.com/pt-br/dotnet/framework/data/adonet/)
+- [Entity Framework Core](https://learn.microsoft.com/pt-br/ef/core/)
+- [SQLite](https://www.sqlite.org/index.html)
 
 ---
 
 <p align="center">
   <b>FIAP - Faculdade de Informática e Administração Paulista</b><br>
-  Desenvolvido com ❤️ por Isadora Meneghetti, Gustavo Ikeda, Henrique Azevedo, Renato Alvarenga e Victoria Moura<br>
+  Desenvolvido com ❤️ por <b>Isadora Meneghetti</b>, <b>Gustavo Ikeda</b>, <b>Henrique Azevedo</b>, <b>Renato Alvarenga</b> e <b>Victoria Moura</b><br>
   © 2026 - Todos os direitos reservados
 </p>
