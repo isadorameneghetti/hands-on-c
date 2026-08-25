@@ -64,6 +64,7 @@ Este repositório contém os projetos desenvolvidos durante a disciplina, aborda
 - **Fluent API** - Configuração programática de entidades
 - **Data Annotations** - Configuração declarativa com atributos
 - **Migrations** - Versionamento do esquema do banco
+- **LINQ** - Consultas avançadas com LINQ
 
 ---
 
@@ -82,7 +83,8 @@ main                    # Branch principal (documentação)
 │
 └── [SEGUNDO SEMESTRE]
     ├── hands-on-08         # ADOLab - CRUD com ADO.NET
-    └── hands-on-09         # DominoPontaDeQuina - EF Core
+    ├── hands-on-09         # DominoPontaDeQuina - EF Core (v1)
+    └── hands-on-10         # DominoPontaDeQuina - EF Core + LINQ (v2)
 ```
 
 ---
@@ -99,7 +101,8 @@ main                    # Branch principal (documentação)
 | `hands-on-05.2` | **GCLab** | Laboratório de Garbage Collection | 1º | ✅ Concluído |
 | `hands-on-06` | **AsyncLab** | Laboratório de Programação Assíncrona | 1º | ✅ Concluído |
 | `hands-on-08` | **ADOLab** | CRUD com ADO.NET e SQL Server | 2º | ✅ Concluído |
-| `hands-on-09` | **DominoPontaDeQuina** | Modelo de dados com EF Core | 2º | ✅ Concluído |
+| `hands-on-09` | **DominoPontaDeQuina** | Modelo de dados com EF Core (v1) | 2º | ✅ Concluído |
+| `hands-on-10` | **DominoPontaDeQuina** | EF Core + LINQ (v2) | 2º | ✅ Concluído |
 
 ---
 
@@ -687,38 +690,175 @@ Inserindo dados iniciais...
 
 ---
 
+## 🗄️ PROJETO 9: DOMINOPONTADEQUINA V2 (hands-on-10) - SEGUNDO SEMESTRE
+
+### Sobre o Projeto
+**Evolução do DominoPontaDeQuina** com implementação completa de **LINQ** nas consultas do repositório, **Unit of Work** e **Repository Pattern** aprimorados.
+
+### 🆕 Novidades da Versão 2 (LINQ)
+
+| # | Funcionalidade | Descrição |
+|---|----------------|-----------|
+| **1** | **Repository Pattern** | Implementação completa com LINQ |
+| **2** | **Unit of Work** | Gerenciamento de transações e repositórios |
+| **3** | **Consultas LINQ** | Filtros, includes, ordenações e agregações |
+| **4** | **Fluent API** | Configuração completa de entidades |
+| **5** | **78 Testes** | 100% de cobertura com xUnit |
+| **6** | **Migrations** | Versionamento do banco de dados |
+
+### 📁 Estrutura do Projeto V2
+
+```
+DominoPontaDeQuina-main/
+│
+├── DominoPontaDeQuina.Core/                # 🧠 Núcleo do Domínio
+│   ├── Enums/
+│   ├── Exceptions/
+│   ├── Interfaces/
+│   ├── Models/
+│   ├── Services/
+│   ├── Validators/
+│   └── Jogo.cs
+│
+├── DominoPontaDeQuina.Domain/              # 📦 Entidades para Persistência
+│   └── Entities/
+│       ├── Jogador.cs
+│       ├── Partida.cs
+│       ├── ParticipacaoPartida.cs
+│       ├── StatusPartida.cs
+│       └── Usuario.cs
+│
+├── DominoPontaDeQuina.Repository/          # 🗄️ Camada de Dados
+│   ├── Context/
+│   │   └── DominoDbContext.cs              # ✅ Fluent API
+│   ├── Extensions/
+│   ├── Interfaces/
+│   │   ├── IJogadorRepository.cs
+│   │   ├── IPartidaRepository.cs
+│   │   ├── IParticipacaoPartidaRepository.cs
+│   │   ├── IRepository.cs
+│   │   ├── IUnitOfWork.cs
+│   │   └── IUsuarioRepository.cs
+│   ├── Repositories/
+│   │   ├── BaseRepository.cs
+│   │   ├── JogadorRepository.cs
+│   │   ├── PartidaRepository.cs
+│   │   ├── ParticipacaoPartidaRepository.cs
+│   │   └── UsuarioRepository.cs
+│   └── UnitOfWork/
+│       └── UnitOfWork.cs
+│
+├── DominoPontaDeQuina.Migrations/          # 🔄 Migrações EF Core
+│   ├── DominoDbContextFactory.cs
+│   ├── Program.cs
+│   ├── domino.db
+│   └── Migrations/
+│       └── 20260825121106_InitialCreate.cs
+│
+└── DominoPontaDeQuina.Tests/               # 🧪 Testes Unitários (78 testes)
+    ├── Models/
+    ├── JogoTests.cs
+    ├── MaoJogadorGapTests.cs
+    ├── PartidaFluxoTests.cs
+    ├── PartidaGapTests.cs
+    ├── RodadaExcecaoTests.cs
+    ├── RodadaFinalizacaoGapTests.cs
+    ├── RodadaGapTests.cs
+    └── TabuleiroGapTests.cs
+```
+
+### 🔍 Exemplos de Consultas LINQ no Repository V2
+
+```csharp
+// PartidaRepository.cs - Consultas com LINQ
+public async Task<IEnumerable<Partida>> GetByJogadorAsync(Guid jogadorId)
+{
+    return await _dbSet
+        .Where(p => p.Participacoes.Any(pp => pp.JogadorId == jogadorId))
+        .Include(p => p.Participacoes)
+            .ThenInclude(pp => pp.Jogador)
+        .OrderByDescending(p => p.IniciadoEm)
+        .ToListAsync();
+}
+
+// JogadorRepository.cs - Ranking com LINQ
+public async Task<IEnumerable<Jogador>> GetJogadoresRankingAsync()
+{
+    return await _dbSet
+        .Include(j => j.Participacoes)
+        .Select(j => new
+        {
+            Jogador = j,
+            PontuacaoTotal = j.Participacoes.Sum(pp => pp.Pontuacao)
+        })
+        .OrderByDescending(x => x.PontuacaoTotal)
+        .Select(x => x.Jogador)
+        .ToListAsync();
+}
+```
+
+### 🚀 Como Executar
+
+```bash
+# 1. Clonar o repositório
+git checkout hands-on-10
+
+# 2. Restaurar pacotes
+dotnet restore
+
+# 3. Entrar na pasta de migrações
+cd DominoPontaDeQuina.Migrations
+
+# 4. Aplicar as migrações
+dotnet ef database update --context DominoDbContext
+
+# 5. Voltar para a raiz e executar os testes
+cd ..
+dotnet test
+```
+
+### 📊 Resultado dos Testes
+
+```
+Test summary: total: 78, failed: 0, succeeded: 78, skipped: 0
+✅ 100% dos testes passando!
+```
+
+---
+
 ## 🧠 CONCEITOS APLICADOS
 
-| Conceito | Jokempo V1 | Jokempo V2 | Blackjack | Agenda | GCLab | AsyncLab | ADOLab | Domino |
-|----------|:----------:|:----------:|:---------:|:------:|:-----:|:--------:|:------:|:------:|
-| **Classes e Objetos** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Métodos** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **If/Else** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Switch/Case** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **While/For** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Listas/Tipos Genéricos** | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Enumerações** | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **Encapsulamento** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Tratamento de Exceções** | ❌ | ✅ | ❌ | ✅ | ✅ | ✅ | ❌ | ✅ |
-| **LINQ** | ❌ | ❌ | ❌ | ✅ | ❌ | ✅ | ❌ | ✅ |
-| **TimeZoneInfo** | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ |
-| **Garbage Collection** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
-| **WeakReference** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
-| **IDisposable Pattern** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
-| **async/await** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| **Task.WhenAll** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| **Paralelismo** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| **Serialização Binária** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| **Comparação de Arquivos** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| **Backup e Versionamento** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| **SqlConnection/SqlCommand** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
-| **SqlParameter** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
-| **Repository Pattern** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
-| **Modo Conectado/Desconectado** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
-| **Entity Framework Core** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **Fluent API** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **Data Annotations** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **Migrations** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Conceito | Jokempo V1 | Jokempo V2 | Blackjack | Agenda | GCLab | AsyncLab | ADOLab | Domino v1 | Domino v2 (LINQ) |
+|----------|:----------:|:----------:|:---------:|:------:|:-----:|:--------:|:------:|:---------:|:----------------:|
+| **Classes e Objetos** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Métodos** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **If/Else** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Switch/Case** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **While/For** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Listas/Tipos Genéricos** | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Enumerações** | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
+| **Encapsulamento** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Tratamento de Exceções** | ❌ | ✅ | ❌ | ✅ | ✅ | ✅ | ❌ | ✅ | ✅ |
+| **LINQ** | ❌ | ❌ | ❌ | ✅ | ❌ | ✅ | ❌ | ✅ | ✅ |
+| **TimeZoneInfo** | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Garbage Collection** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **WeakReference** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **IDisposable Pattern** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **async/await** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
+| **Task.WhenAll** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
+| **Paralelismo** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
+| **Serialização Binária** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
+| **Comparação de Arquivos** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
+| **Backup e Versionamento** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
+| **SqlConnection/SqlCommand** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
+| **SqlParameter** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
+| **Repository Pattern** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
+| **Modo Conectado/Desconectado** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
+| **Entity Framework Core** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
+| **Fluent API** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
+| **Data Annotations** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
+| **Migrations** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
+| **Unit of Work** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 
 ---
 
@@ -738,7 +878,8 @@ git checkout hands-on-06  # AsyncLab
 
 # SEGUNDO SEMESTRE
 git checkout hands-on-08  # ADOLab - CRUD com ADO.NET
-git checkout hands-on-09  # DominoPontaDeQuina - EF Core
+git checkout hands-on-09  # DominoPontaDeQuina - EF Core (v1)
+git checkout hands-on-10  # DominoPontaDeQuina - EF Core + LINQ (v2)
 ```
 
 ---
@@ -778,6 +919,8 @@ git checkout hands-on-09  # DominoPontaDeQuina - EF Core
 18. **Entity Framework Core** - ORM moderno para .NET
 19. **Fluent API vs Data Annotations** - Diferentes abordagens de configuração
 20. **Migrations** - Versionamento do esquema do banco de dados
+21. **LINQ** - Consultas avançadas e expressões lambda
+22. **Unit of Work** - Padrão para gerenciamento de transações
 
 ---
 
@@ -791,6 +934,7 @@ git checkout hands-on-09  # DominoPontaDeQuina - EF Core
 - [ADO.NET Documentation](https://learn.microsoft.com/pt-br/dotnet/framework/data/adonet/)
 - [Entity Framework Core](https://learn.microsoft.com/pt-br/ef/core/)
 - [SQLite](https://www.sqlite.org/index.html)
+- [LINQ Documentation](https://learn.microsoft.com/pt-br/dotnet/csharp/linq/)
 
 ---
 
