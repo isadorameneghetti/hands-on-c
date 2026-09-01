@@ -7,6 +7,7 @@
 ![SQL Server](https://img.shields.io/badge/SQL%20Server-CC2927?style=for-the-badge&logo=microsoft-sql-server&logoColor=white)
 ![Entity Framework](https://img.shields.io/badge/Entity%20Framework-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
 ![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
+![DI](https://img.shields.io/badge/DI-2C8EBB?style=for-the-badge&logo=spring&logoColor=white)
 
 ---
 
@@ -29,7 +30,8 @@
 
 ### Segundo Semestre
 **Acesso a Bancos de Dados com ADO.NET**  
-**Entity Framework Core - ORM para .NET**
+**Entity Framework Core - ORM para .NET**  
+**Injeção de Dependência (DI) e Inversão de Controle (IoC)**
 
 **Professor:** Vinícius Costa Santos
 
@@ -65,6 +67,11 @@ Este repositório contém os projetos desenvolvidos durante a disciplina, aborda
 - **Data Annotations** - Configuração declarativa com atributos
 - **Migrations** - Versionamento do esquema do banco
 - **LINQ** - Consultas avançadas com LINQ
+- **Unit of Work** - Gerenciamento de transações
+- **Injeção de Dependência (DI)** - Desacoplamento e testabilidade
+- **Inversão de Controle (IoC)** - Container gerenciando ciclo de vida
+- **Services Layer** - Orquestração de regras de negócio
+- **Testes com Mocks** - Uso do Moq para testes unitários
 
 ---
 
@@ -84,7 +91,8 @@ main                    # Branch principal (documentação)
 └── [SEGUNDO SEMESTRE]
     ├── hands-on-08         # ADOLab - CRUD com ADO.NET
     ├── hands-on-09         # DominoPontaDeQuina - EF Core (v1)
-    └── hands-on-10         # DominoPontaDeQuina - EF Core + LINQ (v2)
+    ├── hands-on-10         # DominoPontaDeQuina - EF Core + LINQ (v2)
+    └── hands-on-11         # DominoPontaDeQuina - EF Core + LINQ + DI (v3)
 ```
 
 ---
@@ -103,6 +111,7 @@ main                    # Branch principal (documentação)
 | `hands-on-08` | **ADOLab** | CRUD com ADO.NET e SQL Server | 2º | ✅ Concluído |
 | `hands-on-09` | **DominoPontaDeQuina** | Modelo de dados com EF Core (v1) | 2º | ✅ Concluído |
 | `hands-on-10` | **DominoPontaDeQuina** | EF Core + LINQ (v2) | 2º | ✅ Concluído |
+| `hands-on-11` | **DominoPontaDeQuina** | EF Core + LINQ + DI (v3) | 2º | ✅ Concluído |
 
 ---
 
@@ -826,39 +835,354 @@ Test summary: total: 78, failed: 0, succeeded: 78, skipped: 0
 
 ---
 
+## 🆕 PROJETO 10: DOMINOPONTADEQUINA V3 (hands-on-11) - SEGUNDO SEMESTRE
+
+### Sobre o Projeto
+**Evolução do DominoPontaDeQuina** com implementação completa de **Injeção de Dependência (DI)** , **Services Layer** e **testes com Moq**.
+
+### 🎯 Objetivo do Laboratório DI
+
+| # | Objetivo | Status |
+|---|----------|--------|
+| **1** | Criar interfaces para todos os repositories já implementados | ✅ |
+| **2** | Criar uma camada de **services** para orquestrar as regras de uso | ✅ |
+| **3** | Registrar **DbContext**, **repositories** e **services** no `Program.cs` | ✅ |
+| **4** | Alterar a classe de entrada para receber **dependências por construtor** | ✅ |
+| **5** | Remover instanciações diretas com `new` das classes de aplicação | ✅ |
+| **6** | Testar os fluxos principais mantendo as consultas LINQ nos repositories | ✅ |
+
+### 🆕 Novidades da Versão 3 (DI)
+
+| # | Funcionalidade | Descrição |
+|---|----------------|-----------|
+| **1** | **Interfaces dos Repositories** | Definição de contratos para todos os repositories |
+| **2** | **Camada de Services** | Orquestração de regras de negócio |
+| **3** | **Injeção de Dependência** | Registro via `ServiceCollectionExtensions` |
+| **4** | **IHost Builder** | Configuração centralizada da aplicação |
+| **5** | **Testes com Moq** | Testes unitários isolados com mocks |
+| **6** | **Sem instâncias com new** | 100% das dependências injetadas |
+| **7** | **90 Testes** | 100% de cobertura com xUnit + Moq |
+
+### 📁 Estrutura do Projeto V3 (com DI)
+
+```
+DominoPontaDeQuina/
+│
+├── DominoPontaDeQuina.Core/                # 🧠 Núcleo do Domínio (sem alterações)
+│
+├── DominoPontaDeQuina.Domain/              # 📦 Entidades para Persistência
+│   └── Entities/
+│
+├── DominoPontaDeQuina.Repository/          # 🗄️ Camada de Dados
+│   ├── Context/
+│   │   └── DominoDbContext.cs              # ✅ Fluent API
+│   ├── Extensions/
+│   │   └── ServiceCollectionExtensions.cs  # ✅ Registro de Repositories
+│   ├── Interfaces/                         # ✅ NOVAS INTERFACES
+│   │   ├── IJogadorRepository.cs
+│   │   ├── IPartidaRepository.cs
+│   │   ├── IParticipacaoPartidaRepository.cs
+│   │   ├── IRepository.cs
+│   │   ├── IUnitOfWork.cs
+│   │   └── IUsuarioRepository.cs
+│   ├── Repositories/
+│   │   ├── BaseRepository.cs
+│   │   ├── JogadorRepository.cs
+│   │   ├── PartidaRepository.cs
+│   │   ├── ParticipacaoPartidaRepository.cs
+│   │   └── UsuarioRepository.cs
+│   └── UnitOfWork/
+│       └── UnitOfWork.cs
+│
+├── DominoPontaDeQuina.Services/            # ✅ NOVA CAMADA DE SERVICES
+│   ├── Interfaces/
+│   │   ├── IJogadorService.cs
+│   │   ├── IPartidaService.cs
+│   │   ├── IParticipacaoService.cs
+│   │   └── IUsuarioService.cs
+│   ├── Implementations/
+│   │   ├── JogadorService.cs
+│   │   ├── PartidaService.cs
+│   │   ├── ParticipacaoService.cs
+│   │   └── UsuarioService.cs
+│   └── Extensions/
+│       └── ServiceCollectionExtensions.cs  # ✅ Registro de Services
+│
+├── DominoPontaDeQuina.Migrations/          # 🔄 Migrações EF Core
+│   ├── DominoDbContextFactory.cs
+│   ├── Program.cs                          # ✅ Com DI via IHost
+│   ├── domino.db
+│   └── Migrations/
+│
+└── DominoPontaDeQuina.Tests/               # 🧪 Testes Unitários
+    ├── Services/                           # ✅ Testes com Moq
+    │   ├── JogadorServiceTests.cs
+    │   ├── PartidaServiceTests.cs
+    │   ├── ParticipacaoServiceTests.cs
+    │   └── UsuarioServiceTests.cs
+    ├── Models/
+    │   ├── MaoJogadorTests.cs
+    │   ├── PartidaTests.cs
+    │   ├── PecaTests.cs
+    │   └── TabuleiroTests.cs
+    ├── JogoTests.cs
+    ├── MaoJogadorGapTests.cs
+    ├── PartidaFluxoTests.cs
+    ├── PartidaGapTests.cs
+    ├── RodadaExcecaoTests.cs
+    ├── RodadaFinalizacaoGapTests.cs
+    ├── RodadaGapTests.cs
+    └── TabuleiroGapTests.cs
+```
+
+### 🔧 Exemplo de Registro de Serviços (DI)
+
+```csharp
+// Repository Extensions
+public static class ServiceCollectionExtensions
+{
+    public static IServiceCollection AddRepositoryServices(this IServiceCollection services, string connectionString)
+    {
+        services.AddDbContext<DominoDbContext>(options =>
+            options.UseSqlite(connectionString));
+
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+        services.AddScoped<IJogadorRepository, JogadorRepository>();
+        services.AddScoped<IPartidaRepository, PartidaRepository>();
+        services.AddScoped<IParticipacaoPartidaRepository, ParticipacaoPartidaRepository>();
+
+        return services;
+    }
+}
+
+// Services Extensions
+public static class ServiceCollectionExtensions
+{
+    public static IServiceCollection AddServices(this IServiceCollection services)
+    {
+        services.AddScoped<IUsuarioService, UsuarioService>();
+        services.AddScoped<IJogadorService, JogadorService>();
+        services.AddScoped<IPartidaService, PartidaService>();
+        services.AddScoped<IParticipacaoService, ParticipacaoService>();
+
+        return services;
+    }
+}
+
+// Program.cs com DI
+private static IHostBuilder CreateHostBuilder(string[] args) =>
+    Host.CreateDefaultBuilder(args)
+        .ConfigureServices((context, services) =>
+        {
+            var connectionString = "Data Source=domino.db";
+            services.AddRepositoryServices(connectionString);
+            services.AddServices();
+            services.AddTransient<Program>();
+        });
+```
+
+### 🔍 Exemplo de Service com DI
+
+```csharp
+public class PartidaService : IPartidaService
+{
+    private readonly IUnitOfWork _unitOfWork;
+
+    public PartidaService(IUnitOfWork unitOfWork)
+    {
+        _unitOfWork = unitOfWork;
+    }
+
+    public async Task<Partida> CriarPartidaAsync(int pontuacaoAlvo = 50, CancellationToken cancellationToken = default)
+    {
+        if (pontuacaoAlvo <= 0)
+            throw new ArgumentException("Pontuação alvo deve ser maior que 0", nameof(pontuacaoAlvo));
+
+        var partida = new Partida
+        {
+            PontuacaoAlvo = pontuacaoAlvo,
+            Status = StatusPartida.AguardandoJogadores,
+            IniciadoEm = DateTime.Now
+        };
+
+        await _unitOfWork.Partidas.AddAsync(partida, cancellationToken);
+        await _unitOfWork.CompleteAsync(cancellationToken);
+
+        return partida;
+    }
+
+    public async Task<bool> IniciarPartidaAsync(Guid partidaId, CancellationToken cancellationToken = default)
+    {
+        var partida = await _unitOfWork.Partidas.GetByIdAsync(partidaId, cancellationToken);
+        if (partida == null)
+            return false;
+
+        if (partida.Status != StatusPartida.AguardandoJogadores)
+            throw new InvalidOperationException("Partida não pode ser iniciada. Status atual: " + partida.Status);
+
+        var totalParticipantes = await _unitOfWork.ParticipacoesPartidas
+            .GetTotalParticipantesAsync(partidaId, cancellationToken);
+        
+        if (totalParticipantes < 2)
+            throw new InvalidOperationException("Partida precisa de pelo menos 2 participantes para iniciar");
+
+        partida.Status = StatusPartida.EmAndamento;
+        _unitOfWork.Partidas.Update(partida);
+        await _unitOfWork.CompleteAsync(cancellationToken);
+
+        return true;
+    }
+}
+```
+
+### 🧪 Exemplo de Teste com Moq
+
+```csharp
+public class PartidaServiceTests
+{
+    private readonly Mock<IUnitOfWork> _unitOfWorkMock;
+    private readonly IPartidaService _partidaService;
+
+    public PartidaServiceTests()
+    {
+        _unitOfWorkMock = new Mock<IUnitOfWork>();
+        _partidaService = new PartidaService(_unitOfWorkMock.Object);
+    }
+
+    [Fact]
+    public async Task CriarPartidaAsync_DeveCriarPartidaComSucesso()
+    {
+        // Arrange
+        var pontuacaoAlvo = 50;
+        _unitOfWorkMock.Setup(u => u.Partidas.AddAsync(It.IsAny<Partida>(), It.IsAny<CancellationToken>()))
+            .Returns(Task.CompletedTask);
+        _unitOfWorkMock.Setup(u => u.CompleteAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(1);
+
+        // Act
+        var partida = await _partidaService.CriarPartidaAsync(pontuacaoAlvo);
+
+        // Assert
+        Assert.NotNull(partida);
+        Assert.Equal(pontuacaoAlvo, partida.PontuacaoAlvo);
+        Assert.Equal(StatusPartida.AguardandoJogadores, partida.Status);
+        _unitOfWorkMock.Verify(u => u.Partidas.AddAsync(It.IsAny<Partida>(), It.IsAny<CancellationToken>()), Times.Once);
+        _unitOfWorkMock.Verify(u => u.CompleteAsync(It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task IniciarPartidaAsync_ComMenosDe2Participantes_DeveLancarExcecao()
+    {
+        // Arrange
+        var partidaId = Guid.NewGuid();
+        var partida = new Partida { Id = partidaId, Status = StatusPartida.AguardandoJogadores };
+
+        _unitOfWorkMock.Setup(u => u.Partidas.GetByIdAsync(partidaId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(partida);
+        _unitOfWorkMock.Setup(u => u.ParticipacoesPartidas.GetTotalParticipantesAsync(partidaId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(1);
+
+        // Act & Assert
+        await Assert.ThrowsAsync<InvalidOperationException>(
+            () => _partidaService.IniciarPartidaAsync(partidaId));
+    }
+}
+```
+
+### 📊 Resultado dos Testes (V3)
+
+```
+Test summary: total: 90, failed: 0, succeeded: 90, skipped: 0
+✅ 100% dos testes passando!
+
+Novos testes adicionados (Services):
+  - JogadorServiceTests: 4 testes
+  - PartidaServiceTests: 4 testes
+  - ParticipacaoServiceTests: 2 testes
+  - UsuarioServiceTests: 2 testes
+```
+
+### 🚀 Como Executar
+
+```bash
+# 1. Clonar o repositório
+git checkout hands-on-11
+
+# 2. Restaurar pacotes
+dotnet restore
+
+# 3. Entrar na pasta de migrações
+cd DominoPontaDeQuina.Migrations
+
+# 4. Aplicar as migrações
+dotnet ef database update --context DominoDbContext
+
+# 5. Voltar para a raiz e executar o programa
+cd ..
+dotnet run --project DominoPontaDeQuina.Migrations
+
+# 6. Executar os testes
+dotnet test
+```
+
+### 📊 Comparativo das Versões do DominoPontaDeQuina
+
+| Funcionalidade | v1 (hands-on-09) | v2 (hands-on-10) | v3 (hands-on-11) |
+|----------------|:----------------:|:----------------:|:----------------:|
+| **Entity Framework Core** | ✅ | ✅ | ✅ |
+| **Fluent API** | ✅ | ✅ | ✅ |
+| **Data Annotations** | ✅ | ✅ | ✅ |
+| **Migrations** | ✅ | ✅ | ✅ |
+| **SQLite** | ✅ | ✅ | ✅ |
+| **Repository Pattern** | ❌ | ✅ | ✅ |
+| **Unit of Work** | ❌ | ✅ | ✅ |
+| **Consultas LINQ** | ❌ | ✅ | ✅ |
+| **Testes xUnit** | ❌ | ✅ (78) | ✅ (90) |
+| **Interfaces dos Repositories** | ❌ | ❌ | ✅ |
+| **Camada de Services** | ❌ | ❌ | ✅ |
+| **Injeção de Dependência** | ❌ | ❌ | ✅ |
+| **IHost Builder** | ❌ | ❌ | ✅ |
+| **Testes com Moq** | ❌ | ❌ | ✅ |
+| **Sem instâncias com new** | ❌ | ❌ | ✅ |
+
+---
+
 ## 🧠 CONCEITOS APLICADOS
 
-| Conceito | Jokempo V1 | Jokempo V2 | Blackjack | Agenda | GCLab | AsyncLab | ADOLab | Domino v1 | Domino v2 (LINQ) |
-|----------|:----------:|:----------:|:---------:|:------:|:-----:|:--------:|:------:|:---------:|:----------------:|
-| **Classes e Objetos** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Métodos** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **If/Else** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Switch/Case** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **While/For** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Listas/Tipos Genéricos** | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Enumerações** | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
-| **Encapsulamento** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Tratamento de Exceções** | ❌ | ✅ | ❌ | ✅ | ✅ | ✅ | ❌ | ✅ | ✅ |
-| **LINQ** | ❌ | ❌ | ❌ | ✅ | ❌ | ✅ | ❌ | ✅ | ✅ |
-| **TimeZoneInfo** | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Garbage Collection** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ |
-| **WeakReference** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ |
-| **IDisposable Pattern** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ |
-| **async/await** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
-| **Task.WhenAll** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
-| **Paralelismo** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
-| **Serialização Binária** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
-| **Comparação de Arquivos** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
-| **Backup e Versionamento** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
-| **SqlConnection/SqlCommand** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| **SqlParameter** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| **Repository Pattern** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
-| **Modo Conectado/Desconectado** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| **Entity Framework Core** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
-| **Fluent API** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
-| **Data Annotations** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
-| **Migrations** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
-| **Unit of Work** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Conceito | Jokempo V1 | Jokempo V2 | Blackjack | Agenda | GCLab | AsyncLab | ADOLab | Domino v1 | Domino v2 (LINQ) | Domino v3 (DI) |
+|----------|:----------:|:----------:|:---------:|:------:|:-----:|:--------:|:------:|:---------:|:----------------:|:--------------:|
+| **Classes e Objetos** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Métodos** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **If/Else** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Switch/Case** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **While/For** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Listas/Tipos Genéricos** | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Enumerações** | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
+| **Encapsulamento** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Tratamento de Exceções** | ❌ | ✅ | ❌ | ✅ | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ |
+| **LINQ** | ❌ | ❌ | ❌ | ✅ | ❌ | ✅ | ❌ | ✅ | ✅ | ✅ |
+| **TimeZoneInfo** | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Garbage Collection** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **WeakReference** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **IDisposable Pattern** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **async/await** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **Task.WhenAll** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **Paralelismo** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **Serialização Binária** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **SqlConnection/SqlCommand** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
+| **SqlParameter** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
+| **Repository Pattern** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ |
+| **Entity Framework Core** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
+| **Fluent API** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
+| **Data Annotations** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
+| **Migrations** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
+| **Unit of Work** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
+| **Interfaces** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
+| **Injeção de Dependência** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **IHost Builder** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **Testes com Moq** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **Services Layer** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 
 ---
 
@@ -880,6 +1204,7 @@ git checkout hands-on-06  # AsyncLab
 git checkout hands-on-08  # ADOLab - CRUD com ADO.NET
 git checkout hands-on-09  # DominoPontaDeQuina - EF Core (v1)
 git checkout hands-on-10  # DominoPontaDeQuina - EF Core + LINQ (v2)
+git checkout hands-on-11  # DominoPontaDeQuina - EF Core + LINQ + DI (v3)
 ```
 
 ---
@@ -909,18 +1234,18 @@ git checkout hands-on-10  # DominoPontaDeQuina - EF Core + LINQ (v2)
 10. **Sistemas de Busca** - Pesquisa com múltiplos critérios
 
 ### Segundo Semestre
-11. **ADO.NET** - Biblioteca fundamental para acesso a dados em .NET
-12. **SQL Injection** - Como prevenir com `SqlParameter`
-13. **Modos de conexão** - Diferenças entre conectado e desconectado
-14. **Repository Pattern** - Organização e manutenibilidade do código
-15. **Boas práticas** - `using`, centralização de config, tratamento de null
-16. **Execute vs Read** - Quando usar cada método do SqlCommand
-17. **DataTable vs SqlDataReader** - Vantagens de cada abordagem
-18. **Entity Framework Core** - ORM moderno para .NET
-19. **Fluent API vs Data Annotations** - Diferentes abordagens de configuração
-20. **Migrations** - Versionamento do esquema do banco de dados
-21. **LINQ** - Consultas avançadas e expressões lambda
-22. **Unit of Work** - Padrão para gerenciamento de transações
+11. **ADO.NET** - SqlConnection, SqlCommand, SqlParameter
+12. **Repository Pattern** - Organização e manutenibilidade do código
+13. **Entity Framework Core** - ORM moderno para .NET
+14. **Fluent API vs Data Annotations** - Diferentes abordagens de configuração
+15. **Migrations** - Versionamento do esquema do banco de dados
+16. **LINQ** - Consultas avançadas e expressões lambda
+17. **Unit of Work** - Padrão para gerenciamento de transações
+18. **Injeção de Dependência (DI)** - Desacoplamento e testabilidade
+19. **Inversão de Controle (IoC)** - Container gerencia o ciclo de vida
+20. **Services Layer** - Orquestração de regras de negócio
+21. **Testes com Mocks** - Uso do Moq para testes unitários isolados
+22. **Host Builder** - Configuração centralizada da aplicação
 
 ---
 
@@ -935,6 +1260,9 @@ git checkout hands-on-10  # DominoPontaDeQuina - EF Core + LINQ (v2)
 - [Entity Framework Core](https://learn.microsoft.com/pt-br/ef/core/)
 - [SQLite](https://www.sqlite.org/index.html)
 - [LINQ Documentation](https://learn.microsoft.com/pt-br/dotnet/csharp/linq/)
+- [Injeção de Dependência no .NET](https://learn.microsoft.com/pt-br/dotnet/core/extensions/dependency-injection)
+- [Moq Documentation](https://github.com/devlooped/moq)
+- [xUnit Documentation](https://xunit.net/)
 
 ---
 
@@ -943,3 +1271,4 @@ git checkout hands-on-10  # DominoPontaDeQuina - EF Core + LINQ (v2)
   Desenvolvido com ❤️ por <b>Isadora Meneghetti</b>, <b>Gustavo Ikeda</b>, <b>Henrique Azevedo</b>, <b>Renato Alvarenga</b> e <b>Victoria Moura</b><br>
   © 2026 - Todos os direitos reservados
 </p>
+[file content end]
