@@ -8,6 +8,8 @@
 ![Entity Framework](https://img.shields.io/badge/Entity%20Framework-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
 ![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
 ![DI](https://img.shields.io/badge/DI-2C8EBB?style=for-the-badge&logo=spring&logoColor=white)
+![ASP.NET](https://img.shields.io/badge/ASP.NET-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
+![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)
 
 ---
 
@@ -31,7 +33,8 @@
 ### Segundo Semestre
 **Acesso a Bancos de Dados com ADO.NET**  
 **Entity Framework Core - ORM para .NET**  
-**Injeção de Dependência (DI) e Inversão de Controle (IoC)**
+**Injeção de Dependência (DI) e Inversão de Controle (IoC)**  
+**ASP.NET Core Web API - Construção de APIs RESTful**
 
 **Professor:** Vinícius Costa Santos
 
@@ -72,6 +75,8 @@ Este repositório contém os projetos desenvolvidos durante a disciplina, aborda
 - **Inversão de Controle (IoC)** - Container gerenciando ciclo de vida
 - **Services Layer** - Orquestração de regras de negócio
 - **Testes com Mocks** - Uso do Moq para testes unitários
+- **ASP.NET Core Web API** - Criação de APIs RESTful
+- **Swagger/OpenAPI** - Documentação interativa de APIs
 
 ---
 
@@ -92,7 +97,8 @@ main                    # Branch principal (documentação)
     ├── hands-on-08         # ADOLab - CRUD com ADO.NET
     ├── hands-on-09         # DominoPontaDeQuina - EF Core (v1)
     ├── hands-on-10         # DominoPontaDeQuina - EF Core + LINQ (v2)
-    └── hands-on-11         # DominoPontaDeQuina - EF Core + LINQ + DI (v3)
+    ├── hands-on-11         # DominoPontaDeQuina - EF Core + LINQ + DI (v3)
+    └── hands-on-12         # 🆕 DominoPontaDeQuina - Web API (v4)
 ```
 
 ---
@@ -112,6 +118,7 @@ main                    # Branch principal (documentação)
 | `hands-on-09` | **DominoPontaDeQuina** | Modelo de dados com EF Core (v1) | 2º | ✅ Concluído |
 | `hands-on-10` | **DominoPontaDeQuina** | EF Core + LINQ (v2) | 2º | ✅ Concluído |
 | `hands-on-11` | **DominoPontaDeQuina** | EF Core + LINQ + DI (v3) | 2º | ✅ Concluído |
+| `hands-on-12` | **DominoPontaDeQuina** | 🆕 Web API RESTful (v4) | 2º | ✅ Concluído |
 
 ---
 
@@ -1126,63 +1133,698 @@ dotnet run --project DominoPontaDeQuina.Migrations
 dotnet test
 ```
 
+---
+
+## 🆕 PROJETO 11: DOMINOPONTADEQUINA WEB API (hands-on-12) - SEGUNDO SEMESTRE
+
+### Sobre o Projeto
+**Transformação do DominoPontaDeQuina em uma Web API RESTful** utilizando **ASP.NET Core**, com endpoints para todas as operações expostas pelos serviços.
+
+### 🎯 Objetivo do Laboratório Web API
+
+| # | Objetivo | Status |
+|---|----------|--------|
+| **1** | Criar um projeto **Web API** | ✅ |
+| **2** | Adicionar referência do projeto **Application/Services** | ✅ |
+| **3** | Configurar **dependências** no `Program.cs` | ✅ |
+| **4** | Criar **endpoints** para as operações expostas pelos serviços | ✅ |
+| **5** | Documentar a API com **Swagger/OpenAPI** | ✅ |
+| **6** | Implementar **DTOs** para transferência de dados | ✅ |
+
+### 🆕 Novidades da Versão 4 (Web API)
+
+| # | Funcionalidade | Descrição |
+|---|----------------|-----------|
+| **1** | **ASP.NET Core Web API** | API RESTful com controllers |
+| **2** | **Swagger/OpenAPI** | Documentação interativa da API |
+| **3** | **DTOs** | Objetos de transferência de dados |
+| **4** | **Endpoints RESTful** | GET, POST, PUT, DELETE |
+| **5** | **Status Codes HTTP** | 200, 201, 204, 400, 404, 500 |
+| **6** | **Program.cs configurado** | DI, Swagger, CORS, JSON options |
+| **7** | **Controllers** | UsuarioController, JogadorController, PartidaController, ParticipacaoController |
+
+### 📁 Estrutura do Projeto V4 (Web API)
+
+```
+DominoPontaDeQuina/
+│
+├── DominoPontaDeQuina.Core/                # 🧠 Núcleo do Domínio
+│
+├── DominoPontaDeQuina.Domain/              # 📦 Entidades para Persistência
+│
+├── DominoPontaDeQuina.Repository/          # 🗄️ Camada de Dados
+│
+├── DominoPontaDeQuina.Services/            # ✅ Camada de Services
+│
+├── DominoPontaDeQuina.API/                 # 🆕 PROJETO WEB API
+│   ├── Controllers/
+│   │   ├── UsuarioController.cs
+│   │   ├── JogadorController.cs
+│   │   ├── PartidaController.cs
+│   │   └── ParticipacaoController.cs
+│   ├── DTOs/
+│   │   ├── UsuarioDto.cs
+│   │   ├── JogadorDto.cs
+│   │   ├── PartidaDto.cs
+│   │   ├── ParticipacaoDto.cs
+│   │   ├── CriarUsuarioRequest.cs
+│   │   ├── CriarJogadorRequest.cs
+│   │   ├── CriarPartidaRequest.cs
+│   │   └── AtualizarPontuacaoRequest.cs
+│   ├── Extensions/
+│   │   └── ServiceCollectionExtensions.cs
+│   ├── Properties/
+│   │   └── launchSettings.json
+│   ├── appsettings.json
+│   ├── appsettings.Development.json
+│   └── Program.cs                          # ✅ Configuração completa
+│
+├── DominoPontaDeQuina.Migrations/          # 🔄 Migrações EF Core
+│
+└── DominoPontaDeQuina.Tests/               # 🧪 Testes Unitários
+```
+
+### 📦 DTOs (Data Transfer Objects)
+
+#### UsuarioDto.cs
+```csharp
+public class UsuarioDto
+{
+    public Guid Id { get; set; }
+    public string Nome { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public DateTime CriadoEm { get; set; }
+    public List<JogadorDto> Jogadores { get; set; } = new();
+}
+```
+
+#### CriarUsuarioRequest.cs
+```csharp
+public class CriarUsuarioRequest
+{
+    public string Nome { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public string Senha { get; set; } = string.Empty;
+}
+```
+
+#### PartidaDto.cs
+```csharp
+public class PartidaDto
+{
+    public Guid Id { get; set; }
+    public DateTime IniciadoEm { get; set; }
+    public DateTime? FinalizadoEm { get; set; }
+    public string Status { get; set; } = string.Empty;
+    public int PontuacaoAlvo { get; set; }
+    public List<ParticipacaoDto> Participacoes { get; set; } = new();
+}
+```
+
+### 🎮 Controllers
+
+#### UsuarioController.cs
+```csharp
+[ApiController]
+[Route("api/[controller]")]
+public class UsuarioController : ControllerBase
+{
+    private readonly IUsuarioService _usuarioService;
+
+    public UsuarioController(IUsuarioService usuarioService)
+    {
+        _usuarioService = usuarioService;
+    }
+
+    [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<UsuarioDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAll()
+    {
+        var usuarios = await _usuarioService.ObterTodosUsuariosAsync();
+        return Ok(usuarios.Select(u => u.ToDto()));
+    }
+
+    [HttpGet("{id}")]
+    [ProducesResponseType(typeof(UsuarioDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetById(Guid id)
+    {
+        var usuario = await _usuarioService.ObterUsuarioPorIdAsync(id);
+        if (usuario == null)
+            return NotFound($"Usuário com ID {id} não encontrado");
+
+        return Ok(usuario.ToDto());
+    }
+
+    [HttpPost]
+    [ProducesResponseType(typeof(UsuarioDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Create([FromBody] CriarUsuarioRequest request)
+    {
+        try
+        {
+            var usuario = await _usuarioService.CriarUsuarioAsync(
+                request.Nome,
+                request.Email,
+                request.Senha);
+
+            return CreatedAtAction(
+                nameof(GetById),
+                new { id = usuario.Id },
+                usuario.ToDto());
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Conflict(new { error = ex.Message });
+        }
+    }
+
+    [HttpPut("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Update(Guid id, [FromBody] AtualizarUsuarioRequest request)
+    {
+        var usuario = await _usuarioService.ObterUsuarioPorIdAsync(id);
+        if (usuario == null)
+            return NotFound($"Usuário com ID {id} não encontrado");
+
+        usuario.Nome = request.Nome;
+        usuario.Email = request.Email;
+
+        await _usuarioService.AtualizarUsuarioAsync(usuario);
+        return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        var result = await _usuarioService.DeletarUsuarioAsync(id);
+        if (!result)
+            return NotFound($"Usuário com ID {id} não encontrado");
+
+        return NoContent();
+    }
+}
+```
+
+#### PartidaController.cs
+```csharp
+[ApiController]
+[Route("api/[controller]")]
+public class PartidaController : ControllerBase
+{
+    private readonly IPartidaService _partidaService;
+
+    public PartidaController(IPartidaService partidaService)
+    {
+        _partidaService = partidaService;
+    }
+
+    [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<PartidaDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAll(
+        [FromQuery] StatusPartida? status = null,
+        [FromQuery] int? pontuacaoMinima = null)
+    {
+        IEnumerable<Partida> partidas;
+
+        if (status.HasValue)
+        {
+            partidas = await _partidaService.ObterPartidasPorStatusAsync(status.Value);
+        }
+        else if (pontuacaoMinima.HasValue)
+        {
+            partidas = await _partidaService.ObterPartidasComPontuacaoAcimaAsync(pontuacaoMinima.Value);
+        }
+        else
+        {
+            partidas = await _partidaService.ObterPartidasFinalizadasAsync();
+        }
+
+        return Ok(partidas.Select(p => p.ToDto()));
+    }
+
+    [HttpGet("{id}")]
+    [ProducesResponseType(typeof(PartidaDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetById(Guid id)
+    {
+        var partida = await _partidaService.ObterPartidaPorIdAsync(id);
+        if (partida == null)
+            return NotFound($"Partida com ID {id} não encontrada");
+
+        return Ok(partida.ToDto());
+    }
+
+    [HttpGet("jogador/{jogadorId}")]
+    [ProducesResponseType(typeof(IEnumerable<PartidaDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetByJogador(Guid jogadorId)
+    {
+        var partidas = await _partidaService.ObterPartidasPorJogadorAsync(jogadorId);
+        return Ok(partidas.Select(p => p.ToDto()));
+    }
+
+    [HttpPost]
+    [ProducesResponseType(typeof(PartidaDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Create([FromBody] CriarPartidaRequest request)
+    {
+        try
+        {
+            var partida = await _partidaService.CriarPartidaAsync(request.PontuacaoAlvo);
+            return CreatedAtAction(
+                nameof(GetById),
+                new { id = partida.Id },
+                partida.ToDto());
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+    }
+
+    [HttpPost("{id}/iniciar")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Iniciar(Guid id)
+    {
+        var partida = await _partidaService.ObterPartidaPorIdAsync(id);
+        if (partida == null)
+            return NotFound($"Partida com ID {id} não encontrada");
+
+        try
+        {
+            await _partidaService.IniciarPartidaAsync(id);
+            return NoContent();
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+    }
+
+    [HttpPost("{id}/finalizar")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Finalizar(Guid id)
+    {
+        var partida = await _partidaService.ObterPartidaPorIdAsync(id);
+        if (partida == null)
+            return NotFound($"Partida com ID {id} não encontrada");
+
+        try
+        {
+            await _partidaService.FinalizarPartidaAsync(id);
+            return NoContent();
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+    }
+}
+```
+
+#### ParticipacaoController.cs
+```csharp
+[ApiController]
+[Route("api/[controller]")]
+public class ParticipacaoController : ControllerBase
+{
+    private readonly IParticipacaoService _participacaoService;
+
+    public ParticipacaoController(IParticipacaoService participacaoService)
+    {
+        _participacaoService = participacaoService;
+    }
+
+    [HttpGet("partida/{partidaId}")]
+    [ProducesResponseType(typeof(IEnumerable<ParticipacaoDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetByPartida(Guid partidaId)
+    {
+        var participacoes = await _participacaoService.ObterParticipacoesPorPartidaAsync(partidaId);
+        return Ok(participacoes.Select(p => p.ToDto()));
+    }
+
+    [HttpGet("jogador/{jogadorId}")]
+    [ProducesResponseType(typeof(IEnumerable<ParticipacaoDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetByJogador(Guid jogadorId)
+    {
+        var participacoes = await _participacaoService.ObterParticipacoesPorJogadorAsync(jogadorId);
+        return Ok(participacoes.Select(p => p.ToDto()));
+    }
+
+    [HttpPost]
+    [ProducesResponseType(typeof(ParticipacaoDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> AddParticipante([FromBody] AdicionarParticipanteRequest request)
+    {
+        try
+        {
+            var participacao = await _participacaoService.AdicionarParticipanteAsync(
+                request.PartidaId,
+                request.JogadorId,
+                request.Posicao);
+
+            return CreatedAtAction(
+                nameof(GetByPartida),
+                new { partidaId = request.PartidaId },
+                participacao.ToDto());
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+    }
+
+    [HttpPatch("atualizar-pontuacao")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> AtualizarPontuacao([FromBody] AtualizarPontuacaoRequest request)
+    {
+        try
+        {
+            var result = await _participacaoService.AtualizarPontuacaoAsync(
+                request.PartidaId,
+                request.JogadorId,
+                request.NovaPontuacao);
+
+            if (!result)
+                return NotFound("Participação não encontrada");
+
+            return NoContent();
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+    }
+
+    [HttpPatch("definir-vencedor")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> DefinirVencedor([FromBody] DefinirVencedorRequest request)
+    {
+        try
+        {
+            var result = await _participacaoService.DefinirVencedorAsync(
+                request.PartidaId,
+                request.JogadorId);
+
+            if (!result)
+                return NotFound("Participação não encontrada");
+
+            return NoContent();
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+    }
+
+    [HttpDelete]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> RemoverParticipante(Guid partidaId, Guid jogadorId)
+    {
+        var result = await _participacaoService.RemoverParticipanteAsync(partidaId, jogadorId);
+        if (!result)
+            return NotFound("Participação não encontrada");
+
+        return NoContent();
+    }
+}
+```
+
+### ⚙️ Program.cs (Configuração da Web API)
+
+```csharp
+using DominoPontaDeQuina.API.Extensions;
+using DominoPontaDeQuina.Repository.Extensions;
+using DominoPontaDeQuina.Services.Extensions;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Models;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+
+// Configuração de Controllers
+builder.Services.AddControllers()
+    .ConfigureApiBehaviorOptions(options =>
+    {
+        options.InvalidModelStateResponseFactory = context =>
+        {
+            var errors = context.ModelState
+                .Where(e => e.Value?.Errors.Count > 0)
+                .Select(e => new
+                {
+                    Field = e.Key,
+                    Errors = e.Value?.Errors.Select(x => x.ErrorMessage)
+                });
+
+            return new BadRequestObjectResult(new
+            {
+                error = "Dados inválidos",
+                details = errors
+            });
+        };
+    });
+
+// Configuração de Swagger
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "DominoPontaDeQuina API",
+        Version = "v1",
+        Description = "API para gerenciamento de jogos de dominó Ponta de Quina",
+        Contact = new OpenApiContact
+        {
+            Name = "Isadora Meneghetti",
+            Email = "isadora@email.com"
+        }
+    });
+});
+
+// Registro de dependências
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? "Data Source=../DominoPontaDeQuina.Migrations/domino.db";
+
+builder.Services.AddRepositoryServices(connectionString);
+builder.Services.AddServices();
+
+// Configuração de CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+                  .AllowAnyMethod()
+                  .AllowAnyHeader();
+        });
+});
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "DominoPontaDeQuina API v1");
+        c.RoutePrefix = "swagger";
+    });
+}
+
+app.UseHttpsRedirection();
+app.UseCors("AllowAll");
+app.UseAuthorization();
+app.MapControllers();
+
+// Aplicar migrações automaticamente
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<DominoDbContext>();
+    await dbContext.Database.MigrateAsync();
+}
+
+app.Run();
+```
+
+### 📊 Exemplos de Requisições
+
+#### Criar um Usuário
+```http
+POST /api/usuario
+Content-Type: application/json
+
+{
+  "nome": "João Silva",
+  "email": "joao@email.com",
+  "senha": "senha123"
+}
+```
+
+**Resposta:**
+```json
+{
+  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "nome": "João Silva",
+  "email": "joao@email.com",
+  "criadoEm": "2026-09-01T14:30:00Z",
+  "jogadores": []
+}
+```
+
+#### Criar uma Partida
+```http
+POST /api/partida
+Content-Type: application/json
+
+{
+  "pontuacaoAlvo": 50
+}
+```
+
+**Resposta:**
+```json
+{
+  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "iniciadoEm": "2026-09-01T14:30:00Z",
+  "finalizadoEm": null,
+  "status": "AguardandoJogadores",
+  "pontuacaoAlvo": 50,
+  "participacoes": []
+}
+```
+
+#### Adicionar Participante
+```http
+POST /api/participacao
+Content-Type: application/json
+
+{
+  "partidaId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "jogadorId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "posicao": 1
+}
+```
+
+#### Iniciar Partida
+```http
+POST /api/partida/{id}/iniciar
+```
+
+#### Listar Partidas por Status
+```http
+GET /api/partida?status=EmAndamento
+```
+
+#### Listar Partidas com Pontuação Acima de
+```http
+GET /api/partida?pontuacaoMinima=20
+```
+
+### 📱 Swagger UI
+
+A API inclui documentação interativa via Swagger UI, disponível em:
+```
+https://localhost:5001/swagger
+```
+
+![Swagger UI](https://swagger.io/assets/images/swagger_logo.svg)
+
+### 🚀 Como Executar
+
+```bash
+# 1. Clonar o repositório
+git checkout hands-on-12
+
+# 2. Restaurar pacotes
+dotnet restore
+
+# 3. Entrar na pasta da API
+cd DominoPontaDeQuina.API
+
+# 4. Executar a API
+dotnet run
+
+# 5. Acessar a documentação Swagger
+# Abrir no navegador: https://localhost:5001/swagger
+
+# 6. Executar os testes
+cd ..
+dotnet test
+```
+
 ### 📊 Comparativo das Versões do DominoPontaDeQuina
 
-| Funcionalidade | v1 (hands-on-09) | v2 (hands-on-10) | v3 (hands-on-11) |
-|----------------|:----------------:|:----------------:|:----------------:|
-| **Entity Framework Core** | ✅ | ✅ | ✅ |
-| **Fluent API** | ✅ | ✅ | ✅ |
-| **Data Annotations** | ✅ | ✅ | ✅ |
-| **Migrations** | ✅ | ✅ | ✅ |
-| **SQLite** | ✅ | ✅ | ✅ |
-| **Repository Pattern** | ❌ | ✅ | ✅ |
-| **Unit of Work** | ❌ | ✅ | ✅ |
-| **Consultas LINQ** | ❌ | ✅ | ✅ |
-| **Testes xUnit** | ❌ | ✅ (78) | ✅ (90) |
-| **Interfaces dos Repositories** | ❌ | ❌ | ✅ |
-| **Camada de Services** | ❌ | ❌ | ✅ |
-| **Injeção de Dependência** | ❌ | ❌ | ✅ |
-| **IHost Builder** | ❌ | ❌ | ✅ |
-| **Testes com Moq** | ❌ | ❌ | ✅ |
-| **Sem instâncias com new** | ❌ | ❌ | ✅ |
+| Funcionalidade | v1 (hands-on-09) | v2 (hands-on-10) | v3 (hands-on-11) | v4 (hands-on-12) |
+|----------------|:----------------:|:----------------:|:----------------:|:----------------:|
+| **Entity Framework Core** | ✅ | ✅ | ✅ | ✅ |
+| **Fluent API** | ✅ | ✅ | ✅ | ✅ |
+| **Data Annotations** | ✅ | ✅ | ✅ | ✅ |
+| **Migrations** | ✅ | ✅ | ✅ | ✅ |
+| **SQLite** | ✅ | ✅ | ✅ | ✅ |
+| **Repository Pattern** | ❌ | ✅ | ✅ | ✅ |
+| **Unit of Work** | ❌ | ✅ | ✅ | ✅ |
+| **Consultas LINQ** | ❌ | ✅ | ✅ | ✅ |
+| **Testes xUnit** | ❌ | ✅ (78) | ✅ (90) | ✅ (90) |
+| **Interfaces dos Repositories** | ❌ | ❌ | ✅ | ✅ |
+| **Camada de Services** | ❌ | ❌ | ✅ | ✅ |
+| **Injeção de Dependência** | ❌ | ❌ | ✅ | ✅ |
+| **IHost Builder** | ❌ | ❌ | ✅ | ✅ |
+| **Testes com Moq** | ❌ | ❌ | ✅ | ✅ |
+| **Web API** | ❌ | ❌ | ❌ | ✅ |
+| **Swagger/OpenAPI** | ❌ | ❌ | ❌ | ✅ |
+| **DTOs** | ❌ | ❌ | ❌ | ✅ |
+| **Controllers** | ❌ | ❌ | ❌ | ✅ |
+| **Status Codes HTTP** | ❌ | ❌ | ❌ | ✅ |
 
 ---
 
 ## 🧠 CONCEITOS APLICADOS
 
-| Conceito | Jokempo V1 | Jokempo V2 | Blackjack | Agenda | GCLab | AsyncLab | ADOLab | Domino v1 | Domino v2 (LINQ) | Domino v3 (DI) |
-|----------|:----------:|:----------:|:---------:|:------:|:-----:|:--------:|:------:|:---------:|:----------------:|:--------------:|
-| **Classes e Objetos** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Métodos** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **If/Else** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Switch/Case** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **While/For** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Listas/Tipos Genéricos** | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Enumerações** | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
-| **Encapsulamento** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Tratamento de Exceções** | ❌ | ✅ | ❌ | ✅ | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ |
-| **LINQ** | ❌ | ❌ | ❌ | ✅ | ❌ | ✅ | ❌ | ✅ | ✅ | ✅ |
-| **TimeZoneInfo** | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Garbage Collection** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **WeakReference** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **IDisposable Pattern** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **async/await** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ |
-| **Task.WhenAll** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ |
-| **Paralelismo** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ |
-| **Serialização Binária** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ |
-| **SqlConnection/SqlCommand** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
-| **SqlParameter** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
-| **Repository Pattern** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ |
-| **Entity Framework Core** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
-| **Fluent API** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
-| **Data Annotations** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
-| **Migrations** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
-| **Unit of Work** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
-| **Interfaces** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
-| **Injeção de Dependência** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **IHost Builder** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **Testes com Moq** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **Services Layer** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Conceito | Jokempo V1 | Jokempo V2 | Blackjack | Agenda | GCLab | AsyncLab | ADOLab | Domino v1 | Domino v2 (LINQ) | Domino v3 (DI) | Domino v4 (API) |
+|----------|:----------:|:----------:|:---------:|:------:|:-----:|:--------:|:------:|:---------:|:----------------:|:--------------:|:---------------:|
+| **Classes e Objetos** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Métodos** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **If/Else** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Switch/Case** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **While/For** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Listas/Tipos Genéricos** | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Enumerações** | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ |
+| **Encapsulamento** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Tratamento de Exceções** | ❌ | ✅ | ❌ | ✅ | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ |
+| **LINQ** | ❌ | ❌ | ❌ | ✅ | ❌ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ |
+| **TimeZoneInfo** | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Garbage Collection** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **async/await** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **Repository Pattern** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Entity Framework Core** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ |
+| **Fluent API** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ |
+| **Migrations** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ |
+| **Unit of Work** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
+| **Injeção de Dependência** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
+| **Web API RESTful** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **Swagger/OpenAPI** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **DTOs** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **Controllers** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 
 ---
 
@@ -1205,6 +1847,7 @@ git checkout hands-on-08  # ADOLab - CRUD com ADO.NET
 git checkout hands-on-09  # DominoPontaDeQuina - EF Core (v1)
 git checkout hands-on-10  # DominoPontaDeQuina - EF Core + LINQ (v2)
 git checkout hands-on-11  # DominoPontaDeQuina - EF Core + LINQ + DI (v3)
+git checkout hands-on-12  # DominoPontaDeQuina - Web API (v4)
 ```
 
 ---
@@ -1216,6 +1859,7 @@ git checkout hands-on-11  # DominoPontaDeQuina - EF Core + LINQ + DI (v3)
 - Git (para clonar o repositório)
 - Conexão com internet (AsyncLab apenas)
 - SQL Server LocalDB ou SQL Server Express (ADOLab apenas)
+- Navegador web (para Swagger UI na Web API)
 
 ---
 
@@ -1230,22 +1874,24 @@ git checkout hands-on-11  # DominoPontaDeQuina - EF Core + LINQ + DI (v3)
 6. **Gerenciamento de Memória** - Garbage Collection, WeakReference, IDisposable
 7. **Programação Assíncrona** - async/await, Task.WhenAll, paralelismo
 8. **Serialização** - Formatos CSV, JSON e Binário
-9. **Versionamento** - Backup e comparação de versões de arquivos
-10. **Sistemas de Busca** - Pesquisa com múltiplos critérios
 
 ### Segundo Semestre
-11. **ADO.NET** - SqlConnection, SqlCommand, SqlParameter
-12. **Repository Pattern** - Organização e manutenibilidade do código
-13. **Entity Framework Core** - ORM moderno para .NET
-14. **Fluent API vs Data Annotations** - Diferentes abordagens de configuração
-15. **Migrations** - Versionamento do esquema do banco de dados
-16. **LINQ** - Consultas avançadas e expressões lambda
-17. **Unit of Work** - Padrão para gerenciamento de transações
-18. **Injeção de Dependência (DI)** - Desacoplamento e testabilidade
-19. **Inversão de Controle (IoC)** - Container gerencia o ciclo de vida
-20. **Services Layer** - Orquestração de regras de negócio
-21. **Testes com Mocks** - Uso do Moq para testes unitários isolados
-22. **Host Builder** - Configuração centralizada da aplicação
+9. **ADO.NET** - SqlConnection, SqlCommand, SqlParameter
+10. **Repository Pattern** - Organização e manutenibilidade do código
+11. **Entity Framework Core** - ORM moderno para .NET
+12. **Fluent API vs Data Annotations** - Diferentes abordagens de configuração
+13. **Migrations** - Versionamento do esquema do banco de dados
+14. **LINQ** - Consultas avançadas e expressões lambda
+15. **Unit of Work** - Padrão para gerenciamento de transações
+16. **Injeção de Dependência (DI)** - Desacoplamento e testabilidade
+17. **Inversão de Controle (IoC)** - Container gerencia o ciclo de vida
+18. **Services Layer** - Orquestração de regras de negócio
+19. **Testes com Mocks** - Uso do Moq para testes unitários isolados
+20. **Host Builder** - Configuração centralizada da aplicação
+21. **ASP.NET Core Web API** - Criação de APIs RESTful
+22. **Swagger/OpenAPI** - Documentação interativa de APIs
+23. **DTOs** - Data Transfer Objects para comunicação entre camadas
+24. **Status Codes HTTP** - Padrões de resposta RESTful
 
 ---
 
@@ -1263,6 +1909,8 @@ git checkout hands-on-11  # DominoPontaDeQuina - EF Core + LINQ + DI (v3)
 - [Injeção de Dependência no .NET](https://learn.microsoft.com/pt-br/dotnet/core/extensions/dependency-injection)
 - [Moq Documentation](https://github.com/devlooped/moq)
 - [xUnit Documentation](https://xunit.net/)
+- [ASP.NET Core Web API](https://learn.microsoft.com/pt-br/aspnet/core/web-api/)
+- [Swagger/OpenAPI](https://swagger.io/docs/specification/about/)
 
 ---
 
@@ -1271,4 +1919,3 @@ git checkout hands-on-11  # DominoPontaDeQuina - EF Core + LINQ + DI (v3)
   Desenvolvido com ❤️ por <b>Isadora Meneghetti</b>, <b>Gustavo Ikeda</b>, <b>Henrique Azevedo</b>, <b>Renato Alvarenga</b> e <b>Victoria Moura</b><br>
   © 2026 - Todos os direitos reservados
 </p>
-[file content end]
